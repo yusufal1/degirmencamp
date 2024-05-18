@@ -13,11 +13,11 @@ const Header = () => {
         <div className='h-20 flex flex-row justify-between items-center px-[5%]'>
             <div className='flex-1 flex justify-center'>
                 <div className='flex flex-row justify-between gap-5'>
-                    <a className='flex items-center gap-2 font-bold' href="tel:0535 411 30 12">
+                    <a className='flex items-center gap-2' href="tel:0535 411 30 12">
                         <BsFillTelephoneFill size={20} className='text-primary'/> +90 535 411 30 12
                     </a>
                     <span>|</span>
-                    <a className='flex items-center gap-2 font-bold' href="mailto:info@degirmencamp.com">
+                    <a className='flex items-center gap-2' href="mailto:info@degirmencamp.com">
                         <IoMdMail size={20} className='text-primary'/>info@degirmencamp.com
                     </a>
                 </div>
