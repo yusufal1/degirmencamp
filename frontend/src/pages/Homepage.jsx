@@ -1,10 +1,12 @@
 import React from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import main from "../assets/images/main.jpg";
-import banner from "../assets/images/banner.jpeg";
+import main1 from "../assets/images/gorsel-1.jpg";
+import main2 from "../assets/images/gorsel-3.jpg";
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
 import Booking from '../components/Booking';
+import MainSection from '../components/MainSection';
+import Cards from '../components/Cards';
 
 const Homepage = () => {
   return (
@@ -34,7 +36,7 @@ const Homepage = () => {
         );
       }}>
         <div className="relative">
-          <img src={main} alt='main' className="w-full h-auto" />
+          <img src={main1} alt='main' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
             <p className="text-white text-8xl">Doğanın Sesini</p>
             <p className="text-white text-8xl">Dinle</p>
@@ -42,7 +44,7 @@ const Homepage = () => {
           </div>
         </div>
         <div className="relative">
-          <img src={banner} alt='banner' className="w-full h-auto" />
+          <img src={main2} alt='banner' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
           <p className="text-white text-8xl">Dere Kenarında</p>
             <p className="text-white text-8xl">Huzur</p>
@@ -51,6 +53,8 @@ const Homepage = () => {
         </div>
       </Carousel>
       <Booking/>
+      <MainSection/>
+      <Cards/>
     </div>
   );
 }

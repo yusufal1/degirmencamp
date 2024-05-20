@@ -1,8 +1,16 @@
 import React from 'react'
+import { motion } from "framer-motion"
 
 const Booking = () => {
   return (
-    <div id='booking' className=' bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col'>
+    <motion.div
+    initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.8,
+        delay: 0.5,
+        ease: [0, 0.71, 0.2, 1.01]}}
+ id='booking' className=' bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col'>
             <h3 className='text-4xl'>Rezervasyonunuzu Yapın</h3>
             <form className='mt-[5%] grid grid-cols-4 gap-8'>
                 <div className='flex flex-col gap-1'>
@@ -39,7 +47,7 @@ const Booking = () => {
                 </div>
                 <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Şimdi Rezervasyon Yap</button>
             </form>
-    </div>
+            </motion.div>
   )
 }
 

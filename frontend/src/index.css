@@ -73,5 +73,10 @@
   background: #40A578; 
   border-radius: 10px;
 }
+/*Scrollbar*/
+
+.img-clip {
+  clip-path: polygon(15% 0, 100% 0%, 85% 100%, 0% 100%);
+}
 
 
