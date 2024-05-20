@@ -7,6 +7,7 @@ import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
 import Booking from '../components/Booking';
 import MainSection from '../components/MainSection';
 import Cards from '../components/Cards';
+import Events from '../components/Events';
 
 const Homepage = () => {
   return (
@@ -55,6 +56,7 @@ const Homepage = () => {
       <Booking/>
       <MainSection/>
       <Cards/>
+      <Events/>
     </div>
   );
 }
