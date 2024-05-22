@@ -3,7 +3,7 @@ import Logo from '../assets/images/degirmen-kamp-logo-siyah.png'
 
 const Footer = () => {
   return (
-    <div className='flex flex-col '>
+    <div className='flex flex-col border-t mt-[5%]'>
         <div className='flex px-[20%] py-10 flex-row justify-between'>
         <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>Bilgi</h4>

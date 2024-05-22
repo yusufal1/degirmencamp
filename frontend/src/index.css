@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
   font-family: "Poetsen One", sans-serif;
@@ -50,10 +50,10 @@
 }
 
 .rez-btn {
-  background: linear-gradient(to right, #F0C52C 50%, #40A578 50%);
+  background: linear-gradient(to right, #f0c52c 50%, #40a578 50%);
   background-size: 200% 100%;
   background-position: right bottom;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .rez-btn:hover {
@@ -68,9 +68,9 @@
 ::-webkit-scrollbar-track {
   border-radius: 10px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
-  background: #40A578; 
+  background: #40a578;
   border-radius: 10px;
 }
 /*Scrollbar*/
@@ -79,4 +79,9 @@
   clip-path: polygon(15% 0, 100% 0%, 85% 100%, 0% 100%);
 }
 
+.options-card-shadow {
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(240, 198, 44, 1);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(240, 198, 44, 1);
+  box-shadow: 10px 10px 5px 0px rgba(240, 198, 44, 1);
+}
 
