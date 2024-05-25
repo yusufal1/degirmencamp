@@ -7,13 +7,13 @@ const Footer = () => {
         <div className='flex px-[20%] py-10 flex-row justify-between'>
         <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>Bilgi</h4>
-            <li><a href="/" className='text-gray-500'>Yol Tarifi</a></li>
-            <li><a href="/" className='text-gray-500'>İletişim</a></li>
+            <li><a href="https://www.google.com/maps/dir//Zeytinli,+Değirmen+Camping,+72.+Sk.+No:1,+10300+Edremit%2FBalıkesir/@39.6166619,26.9534734,17z/data=!4m9!4m8!1m0!1m5!1m1!1s0x14b0c7ad7a5570eb:0x4424817a18225443!2m2!1d26.9538132!2d39.6172539!3e0?entry=ttu" target='blank' className='text-gray-500'>Yol Tarifi</a></li>
+            <li><a href="/iletisim" className='text-gray-500'>İletişim</a></li>
         </ul>
         <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>Hakkımızda</h4>
-            <li><a href="/" className='text-gray-500'>Hakkımızda</a></li>
-            <li><a href="/" className='text-gray-500'>Yorumlar</a></li>
+            <li><a href="/hakkimizda" className='text-gray-500'>Hakkımızda</a></li>            
+            <li><a href="/yorumlar" className='text-gray-500'>Yorumlar</a></li>
         </ul>
         <a href="/"><img src={Logo} alt="logo" width={130}/></a>
         <ul className='flex flex-col gap-3'>

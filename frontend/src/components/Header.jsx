@@ -27,9 +27,11 @@ const Header = () => {
             </div>
             <div className='flex-1 flex justify-center'>
                 <div className='flex flex-row gap-4'>
-                    <a href="https://www.instagram.com/degirmen_camp/"><FaFacebook size={40}/></a>
                     <a href="https://www.instagram.com/degirmen_camp/" target='blank'><FaInstagram size={40}/></a>
-                    <a href="https://www.instagram.com/degirmen_camp/"><FaXTwitter size={40}/></a>
+                    <select className='outline-none px-2'>
+                        <option value="TR">TR</option>
+                        <option value="EN">EN</option>
+                    </select>
                 </div>
             </div>
         </div>

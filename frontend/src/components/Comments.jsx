@@ -5,7 +5,7 @@ import Avatar2 from '../assets/images/avatar2.png'
 
 const Comments = () => {
   return (
-    <div className='px-[5%] flex flex-col py-[10%] bg-[#EFEEEA]'>
+    <div id='comments' className='px-[5%] flex flex-col py-[10%] bg-[#EFEEEA]'>
         <h2 className='text-center text-5xl font-bold'>Misafirlerimizin Yorumları</h2>
         <div className='flex flex-row justify-between gap-12 mt-[10%]'>
             <div className='flex flex-col basis-1/3 gap-8 items-center'>
