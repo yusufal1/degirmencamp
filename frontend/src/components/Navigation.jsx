@@ -6,7 +6,7 @@ const Navigation = () => {
   const selected = location.pathname
 
   return (
-    <nav className='navbar-clip bg-[#EFEEEA] flex items-center justify-center pt-5'>
+    <nav className='navbar-clip bg-[#EFEEEA] md:flex items-center justify-center hidden pt-5'>
       <ul className='flex flex-row gap-8 text-black'>
         <li>
           <a
