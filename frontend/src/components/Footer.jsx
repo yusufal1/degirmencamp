@@ -18,13 +18,13 @@ const Footer = () => {
         <a href="/"><img src={Logo} alt="logo" width={130}/></a>
         <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>Rezervasyon</h4>
-            <li><a href="/" className='text-gray-500'>Hemen Rezervasyon</a></li>
-            <li><a href="/" className='text-gray-500'>Seçenekler</a></li>
+            <li><a href="/rezervasyon" className='text-gray-500'>Hemen Rezervasyon</a></li>
+            <li><a href="/seceneklerimiz" className='text-gray-500'>Seçenekler</a></li>
         </ul>
         <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>Keşfet</h4>
-            <li><a href="/" className='text-gray-500'>Etkinliklerimiz</a></li>
-            <li><a href="/" className='text-gray-500'>Sıkça Sorulan Sorular</a></li>
+            <li><a href="/etkinliklerimiz" className='text-gray-500'>Etkinliklerimiz</a></li>
+            <li><a href="/sss" className='text-gray-500'>Sıkça Sorulan Sorular</a></li>
         </ul>
         </div>
         <div className='bg-[#EFEEEA] py-3 text-gray-500 text-center text-sm'>

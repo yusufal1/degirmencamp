@@ -8,8 +8,9 @@ import Options from "./pages/Options";
 import OurEvents from "./pages/OurEvents";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
-import Comments from "./pages/CustomerComments";
 import CustomerComments from "./pages/CustomerComments";
+import Reservation from "./pages/Reservation";
+import Faq from "./pages/Faq";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
             <Route path="/galeri" element={<Gallery/>} component={() => <div>Galeri</div>} />
             <Route path="/iletisim" element={<Contact/>} component={() => <div>İletişim</div>} />
             <Route path="/yorumlar" element={<CustomerComments/>}/>
+            <Route path="/rezervasyon" element={<Reservation/>}/>
+            <Route path="/sss" element={<Faq/>}/>
         </Routes>
         <Footer/>
       </Router>

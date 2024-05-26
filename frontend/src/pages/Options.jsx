@@ -26,7 +26,7 @@ const Options = () => {
             Rezervasyon
           </a>
         </div>
-        <img src={BungalovImg} alt="bungalovlar" width={600} />
+        <img src={BungalovImg} alt="bungalovlar" className="w-[500px]"/>
       </div>
       <div className="flex justify-between mt-[5%] gap-8 border border-secondary rounded-xl p-5 options-card-shadow">
         <div className="flex flex-col gap-4">
@@ -45,7 +45,7 @@ const Options = () => {
             Rezervasyon
           </a>
         </div>
-        <img src={CadirImg} alt="cadir" width={600} />
+        <img src={CadirImg} alt="cadir" className="w-[500px]" />
       </div>
       <div className="flex justify-between mt-[5%] gap-8 border border-secondary rounded-xl p-5 options-card-shadow">
         <div className="flex flex-col gap-4">
@@ -64,7 +64,7 @@ const Options = () => {
             Rezervasyon
           </a>
         </div>
-        <img src={KaravanImg} alt="karavan" width={600} />
+        <img src={KaravanImg} alt="karavan" className="w-[500px]" />
       </div>
     </div>
   );
