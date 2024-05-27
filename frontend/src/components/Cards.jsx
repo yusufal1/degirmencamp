@@ -11,9 +11,9 @@ import { IoWater } from "react-icons/io5";
 
 const Cards = () => {
     return (
-        <section className='flex flex-col items-center px-[20%] py-10 bg-[#EFEEEA]'>
-            <h2 className='text-5xl'>Seçeneklerimiz</h2>
-            <div className='flex flex-row gap-10 mt-[10%]'>
+        <section className='flex flex-col items-center md:px-[20%] px-[10%] py-10 bg-[#EFEEEA]'>
+            <h2 className='md:text-4xl text-2xl'>Seçeneklerimiz</h2>
+            <div className='flex lg:flex-row flex-col gap-10 mt-[10%]'>
                 {/* Bungalov */}
                 <div className='flex flex-col items-center basis-1/3'>
                     <img src={BungalovImg} alt="bungalov" className='h-[400px] w-[400px] object-cover'/>
@@ -28,7 +28,7 @@ const Cards = () => {
                         <FaWifi size={30} className='hover:text-primary'/>
                         <TbAirConditioning size={30} className='hover:text-primary'/>
                     </div>
-                    <a href="/" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
+                    <a href="/seceneklerimiz" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
                 </div>
 
                 {/* Çadır */}
@@ -45,7 +45,7 @@ const Cards = () => {
                         <FaKitchenSet size={30} className='hover:text-primary'/>
                         <FaWifi size={30} className='hover:text-primary'/>
                     </div>
-                    <a href="/" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
+                    <a href="/seceneklerimiz" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
                 </div>
 
                 {/* Karavan */}
@@ -61,7 +61,7 @@ const Cards = () => {
                         <FaWifi size={30} className='hover:text-primary'/>
                         <MdOutlineElectricalServices size={30} className='hover:text-primary'/>
                     </div>
-                    <a href="/" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
+                    <a href="/seceneklerimiz" className='text-gray-600 hover:text-primary duration-200 mt-4'>Daha Fazlası</a>
                 </div>
             </div>
         </section>

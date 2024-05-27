@@ -11,7 +11,7 @@ import 'react-accessible-accordion/dist/fancy-example.css';
 const Faq = () => {
   return (
     <div className='px-[20%] py-[10%]'>
-        <h3 className='text-center font-bold text-4xl mb-8'>Sıkça Sorulan Sorular</h3>
+        <h3 className='text-center font-bold md:text-4xl text-2xl mb-8'>Sıkça Sorulan Sorular</h3>
         <Accordion>
             <AccordionItem>
                 <AccordionItemHeading>

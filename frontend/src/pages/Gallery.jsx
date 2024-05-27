@@ -45,7 +45,7 @@ const Gallery = () => {
 
   return (
     <div className='flex flex-col px-[10%] py-[10%] items-center gap-10'>
-      <h1 className='font-bold text-5xl'>Galeri</h1>
+      <h1 className='font-bold md:text-5xl text-2xl'>Galeri</h1>
       <div className='relative w-full'>
         <div className='grid xl:grid-cols-4 md:grid-cols-2 gap-4 max-h-[750px] overflow-scroll'>
           <img src={Image1} alt="" className='gallery-image' onClick={() => openModal(Image1)} />

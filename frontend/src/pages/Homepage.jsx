@@ -40,16 +40,16 @@ const Homepage = () => {
         <div className="relative">
           <img src={main1} alt='main' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
-            <p className="text-white text-8xl">Doğanın Sesini</p>
-            <p className="text-white text-8xl">Dinle</p>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Doğanın Sesini</p>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Dinle</p>
             <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>Rezervasyon</a>
           </div>
         </div>
         <div className="relative">
           <img src={main2} alt='banner' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
-          <p className="text-white text-8xl">Dere Kenarında</p>
-            <p className="text-white text-8xl">Huzur</p>
+          <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Dere Kenarında</p>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Huzur</p>
             <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>Rezervasyon</a>
           </div>
         </div>
@@ -62,6 +62,7 @@ const Homepage = () => {
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d98350.18082433296!2d26.87141228981586!3d39.61722479485123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x14b0c7ad7a5570eb%3A0x4424817a18225443!2sZeytinli%2C%2072.%20Sk.%20No%3A1%2C%2010300%20Edremit%2FBal%C4%B1kesir!3m2!1d39.6172539!2d26.9538132!5e0!3m2!1str!2str!4v1716325718706!5m2!1str!2str"
         allowFullScreen=""
+        title='degirmen'
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         className='w-full h-[500px]'

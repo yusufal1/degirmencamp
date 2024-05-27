@@ -2,9 +2,9 @@ import React from 'react'
 
 const Booking = () => {
   return (
-    <div id='booking' className=' bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col'>
-            <h3 className='text-4xl'>Rezervasyonunuzu Yapın</h3>
-            <form className='mt-[5%] grid grid-cols-4 gap-8'>
+    <div id='booking' className=' bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col px-[10%]'>
+            <h3 className='md:text-4xl text-2xl'>Rezervasyonunuzu Yapın</h3>
+            <form className='mt-[5%] grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8'>
                 <div className='flex flex-col gap-1'>
                     <label htmlFor='fullname'>Ad Soyad</label>
                     <input type="text" id='fullname' name='fullname' className='rounded-2xl h-10 outline-none focus:outline-secondary px-4' placeholder='Ad Soyad'/>
@@ -37,7 +37,7 @@ const Booking = () => {
                     <label htmlFor='numberOfChildren'>Çocuk Sayısı</label>
                     <input type="number" id='numberOfChildren' name='numberOfChildren' min={1} className='rounded-2xl h-10 outline-none focus:outline-secondary px-4' placeholder='Çocuk Sayısı'/>
                 </div>
-                <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Şimdi Rezervasyon Yap</button>
+                <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Gönder</button>
             </form>
             </div>
   )

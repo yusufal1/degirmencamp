@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import CustomerComments from "./pages/CustomerComments";
 import Reservation from "./pages/Reservation";
 import Faq from "./pages/Faq";
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/rezervasyon" element={<Reservation/>}/>
             <Route path="/sss" element={<Faq/>}/>
         </Routes>
+        <ScrollToTopButton />
         <Footer/>
       </Router>
     </>
