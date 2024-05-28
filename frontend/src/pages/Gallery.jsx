@@ -22,8 +22,10 @@ import Image20 from '../assets/images/gorsel-20.jpeg';
 import Image21 from '../assets/images/gorsel-21.jpg';
 import Image22 from '../assets/images/gorsel-22.jpg';
 import { PiMouseScroll } from 'react-icons/pi';
+import { useTranslation } from 'react-i18next';
 
 const Gallery = () => {
+  const { t } = useTranslation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [blink, setBlink] = useState(true);
 
@@ -45,7 +47,7 @@ const Gallery = () => {
 
   return (
     <div className='flex flex-col px-[10%] py-[10%] items-center gap-10'>
-      <h1 className='font-bold md:text-5xl text-2xl'>Galeri</h1>
+      <h1 className='font-bold md:text-5xl text-2xl'>{t('gallery')}</h1>
       <div className='relative w-full'>
         <div className='grid xl:grid-cols-4 md:grid-cols-2 gap-4 max-h-[750px] overflow-scroll'>
           <img src={Image1} alt="" className='gallery-image' onClick={() => openModal(Image1)} />

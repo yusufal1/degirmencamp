@@ -6,13 +6,14 @@ import 'swiper/css/navigation';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import Avatar from '../assets/images/avatar.png'
 import Avatar2 from '../assets/images/avatar2.png'
+import { useTranslation } from 'react-i18next';
 
 const Comments = () => {
-  return (
-       
+  const { t } = useTranslation();
+  return (       
 
         <div className='flex bg-[#EFEEEA] flex-col items-center px-[10%] pb-[5%]'>
-      <h3 className='font-bold md:text-4xl text-2xl text-center my-[5%]'>Misafirlerimizin Yorumları</h3>
+      <h3 className='font-bold md:text-4xl text-2xl text-center my-[5%]'>{t('guestComments')}</h3>
       <div className='w-full flex justify-center'>
         <Swiper
           spaceBetween={20}

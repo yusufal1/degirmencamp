@@ -1,7 +1,9 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 const Navigation = () => {
+  const {t} = useTranslation();
   const location = useLocation()
   const selected = location.pathname
 
@@ -13,7 +15,7 @@ const Navigation = () => {
             href="/"
             className={`${selected === '/' ? 'active' : ''} hover:hover-links`}
           >
-            Ana Sayfa
+            {t('homepage')}
           </a>
         </li>
         <li>
@@ -21,7 +23,7 @@ const Navigation = () => {
             href="/hakkimizda"
             className={`${selected === '/hakkimizda' ? 'active' : ''} hover:hover-links`}
           >
-            Hakkımızda
+            {t('about-us')}
           </a>
         </li>
         <li>
@@ -29,7 +31,7 @@ const Navigation = () => {
             href="/seceneklerimiz"
             className={`${selected === '/seceneklerimiz' ? 'active' : ''} hover:hover-links`}
           >
-            Seçeneklerimiz
+            {t('options')}
           </a>
         </li>
         <li>
@@ -37,7 +39,7 @@ const Navigation = () => {
             href="/etkinliklerimiz"
             className={`${selected === '/etkinliklerimiz' ? 'active' : ''} hover:hover-links`}
           >
-            Etkinliklerimiz
+            {t('events')}
           </a>
         </li>
         <li>
@@ -45,7 +47,7 @@ const Navigation = () => {
             href="/galeri"
             className={`${selected === '/galeri' ? 'active' : ''} hover:hover-links`}
           >
-            Galeri
+            {t('gallery')}
           </a>
         </li>
         <li>
@@ -53,7 +55,7 @@ const Navigation = () => {
             href="/iletisim"
             className={`${selected === '/iletisim' ? 'active' : ''} hover:hover-links`}
           >
-            İletişim
+            {t('contact')}
           </a>
         </li>
       </ul>

@@ -9,8 +9,10 @@ import MainSection from '../components/MainSection';
 import Cards from '../components/Cards';
 import Events from '../components/Events';
 import Comments from '../components/Comments';
+import { useTranslation } from 'react-i18next';
 
 const Homepage = () => {
+  const {t} = useTranslation();
   return (
     <div>
       <Carousel showThumbs={false} showStatus={false} autoPlay={true} infiniteLoop={true} renderArrowPrev={(clickHandler, hasPrev) => {
@@ -40,17 +42,17 @@ const Homepage = () => {
         <div className="relative">
           <img src={main1} alt='main' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
-            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Doğanın Sesini</p>
-            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Dinle</p>
-            <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>Rezervasyon</a>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title1-1')}</p>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title1-2')}</p>
+            <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>{t('reservation')}</a>
           </div>
         </div>
         <div className="relative">
           <img src={main2} alt='banner' className="w-full h-auto" />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
-          <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Dere Kenarında</p>
-            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">Huzur</p>
-            <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>Rezervasyon</a>
+          <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title2-1')}</p>
+            <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title2-2')}</p>
+            <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>{t('reservation')}</a>
           </div>
         </div>
       </Carousel>

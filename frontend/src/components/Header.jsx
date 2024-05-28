@@ -6,9 +6,19 @@ import logo from "../assets/images/degirmen-kamp-logo-siyah.png";
 import { Fade as Hamburger } from 'hamburger-react';
 import MobileNav from './MobileNav';
 import Navigation from '../components/Navigation';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
+    const { i18n } = useTranslation();
     const [isOpen, setOpen] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+
+    const handleLanguageChange = (e) => {
+        const newLang = e.target.value;
+        i18n.changeLanguage(newLang);
+        setSelectedLanguage(newLang);
+        localStorage.setItem('i18nextLng', newLang);
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -17,11 +27,15 @@ const Header = () => {
             document.body.style.overflow = 'auto';
         }
 
-        // Cleanup function to reset the overflow style
         return () => {
             document.body.style.overflow = 'auto';
         };
     }, [isOpen]);
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('i18nextLng') || 'tr';
+        setSelectedLanguage(savedLanguage);
+    }, []);
 
     return (
         <header className='flex flex-col w-full'>
@@ -47,9 +61,9 @@ const Header = () => {
                 
                 <div className='md:flex hidden flex-row gap-4 basis-1/3 justify-end'>
                     <a href="https://www.instagram.com/degirmen_camp/" target='blank'><FaInstagram size={40}/></a>
-                    <select className='outline-none px-2'>
-                        <option value="TR">TR</option>
-                        <option value="EN">EN</option>
+                    <select className='outline-none px-2' value={selectedLanguage} onChange={handleLanguageChange}>
+                        <option value="tr">TR</option>
+                        <option value="en">EN</option>
                     </select>
                 </div>
             </div>

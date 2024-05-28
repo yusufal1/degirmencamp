@@ -1,7 +1,12 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import { FaInstagram } from "react-icons/fa";
 
 const MobileNav = () => {
+  const { t, i18n } = useTranslation();
+  const handleLanguageChange = (e) => {
+    i18n.changeLanguage(e.target.value);
+};
   return (
       <ul className='flex flex-col gap-5 w-full items-center text-xl text-white'>
         <li>
@@ -9,7 +14,7 @@ const MobileNav = () => {
             href="/"
             className='hover:hover-links'
           >
-            Ana Sayfa
+            {t('homepage')}
           </a>
         </li>
         <li>
@@ -17,7 +22,7 @@ const MobileNav = () => {
             href="/hakkimizda"
             className='hover:hover-links'
           >
-            Hakkımızda
+            {t('about-us')}
           </a>
         </li>
         <li>
@@ -25,7 +30,7 @@ const MobileNav = () => {
             href="/seceneklerimiz"
             className='hover:hover-links'
           >
-            Seçeneklerimiz
+            {t('options')}
           </a>
         </li>
         <li>
@@ -33,7 +38,7 @@ const MobileNav = () => {
             href="/etkinliklerimiz"
             className='hover:hover-links'
           >
-            Etkinliklerimiz
+            {t('events')}
           </a>
         </li>
         <li>
@@ -41,7 +46,7 @@ const MobileNav = () => {
             href="/galeri"
             className='hover:hover-links'
           >
-            Galeri
+            {t('gallery')}
           </a>
         </li>
         <li>
@@ -49,14 +54,14 @@ const MobileNav = () => {
             href="/iletisim"
             className='hover:hover-links'
           >
-            İletişim
+            {t('contact')}
           </a>
         </li>
         <div className='flex flex-row gap-4 justify-center'>
                     <a href="https://www.instagram.com/degirmen_camp/" target='blank'><FaInstagram size={40}/></a>
-                    <select className='outline-none px-2 bg-transparent text-white'>
-                        <option value="TR" className='text-black'>TR</option>
-                        <option value="EN" className='text-black'>EN</option>
+                    <select className='outline-none px-2 bg-transparent text-white' onChange={handleLanguageChange}>
+                        <option value="tr" className='text-black'>TR</option>
+                        <option value="en" className='text-black'>EN</option>
                     </select>
         </div>
       </ul>

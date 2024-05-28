@@ -10,11 +10,13 @@ import EventImg2 from '../assets/images/events2.jpg';
 import EventImg3 from '../assets/images/events3.jpg';
 import EventImg4 from '../assets/images/events4.jpg';
 import EventImg5 from '../assets/images/events5.jpg';
+import { useTranslation } from 'react-i18next';
 
 const Events = () => {
+  const { t } = useTranslation();
   return (
     <div className='flex flex-col items-center md:px-[20%] px-[10%] pb-[5%]'>
-      <h3 className='font-bold md:text-4xl text-2xl text-center my-[5%]'>Etkinliklerimiz</h3>
+      <h3 className='font-bold md:text-4xl text-2xl text-center my-[5%]'>{t('events')}</h3>
       <div className='w-full flex justify-center'>
         <Swiper
           spaceBetween={20}
