@@ -37,6 +37,9 @@
   .gallery-image {
     @apply object-cover w-full h-[250px]
   }
+  .footer-hover-links {
+    @apply hover:text-secondary duration-300
+  }
 }
 
 .carousel .slide img {
