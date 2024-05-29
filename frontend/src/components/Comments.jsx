@@ -1,18 +1,17 @@
-import React from 'react'
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import Avatar from '../assets/images/avatar.png'
-import Avatar2 from '../assets/images/avatar2.png'
+import Avatar from '../assets/images/avatar.png';
+import Avatar2 from '../assets/images/avatar2.png';
 import { useTranslation } from 'react-i18next';
 
 const Comments = () => {
   const { t } = useTranslation();
-  return (       
-
-        <div className='flex bg-[#EFEEEA] flex-col items-center px-[10%] pb-[5%]'>
+  return (
+    <div className='flex bg-[#EFEEEA] flex-col items-center px-[10%] pb-[5%]'>
       <h3 className='font-bold md:text-4xl text-2xl text-center my-[5%]'>{t('guestComments')}</h3>
       <div className='w-full flex justify-center'>
         <Swiper
@@ -38,31 +37,30 @@ const Comments = () => {
           className='w-full'
         >
           <SwiperSlide className='flex justify-center'>
-          <div className='flex flex-col gap-8 items-center'>
-                <img src={Avatar} className='rounded-full border-4 border-secondary' width={100} alt="" />
-                <p className='text-center text-gray-500'>Konumu merkezi, temizlik ve güvenlik konularında sıkıntısı olmayan bir kamp alanı. Elektrik ve şebeke sorunu yok, hem kamp yaptık hem de uzaktan çalışarak işlerimize devam ettik. İlgisinden dolayı İsmail abi'ye teşekkür ederiz.</p>
-                <span className='mt-auto'>Ali Batir</span>
+            <div className='flex flex-col gap-8 items-center h-full'>
+              <img src={Avatar} className='rounded-full border-4 border-secondary' width={100} alt="" />
+              <p className='text-center text-gray-500'>Konumu merkezi, temizlik ve güvenlik konularında sıkıntısı olmayan bir kamp alanı. Elektrik ve şebeke sorunu yok, hem kamp yaptık hem de uzaktan çalışarak işlerimize devam ettik. İlgisinden dolayı İsmail abi'ye teşekkür ederiz.</p>
+              <span className='mt-auto self-center'>Ali Batir</span>
             </div>
           </SwiperSlide>
           <SwiperSlide className='flex justify-center'>
-          <div className='flex flex-col gap-8 items-center'>
-                <img src={Avatar} className='rounded-full border-4 border-secondary' width={100} alt="" />
-                <p className='text-center text-gray-500'>Edremit Zeytinli köyünün çok tatlı bir kamp alanı burası. İsmail abi ve Muharrem abi bizleri güleryüzlü bir şekilde karşıladılar. Ortak kulanım alanları duş , tuvalet ve mutfakları da temizdi. Dere kenarında huzurlu iki gün geçirdik.</p>
-                <span className='mt-auto'>gezginhocayollarda</span>
+            <div className='flex flex-col gap-8 items-center h-full'>
+              <img src={Avatar} className='rounded-full border-4 border-secondary' width={100} alt="" />
+              <p className='text-center text-gray-500'>Edremit Zeytinli köyünün çok tatlı bir kamp alanı burası. İsmail abi ve Muharrem abi bizleri güleryüzlü bir şekilde karşıladılar. Ortak kulanım alanları duş , tuvalet ve mutfakları da temizdi. Dere kenarında huzurlu iki gün geçirdik.</p>
+              <span className='mt-auto self-center'>gezginhocayollarda</span>
             </div>
-
           </SwiperSlide>
           <SwiperSlide className='flex justify-center'>
-          <div className='flex flex-col gap-8 items-center'>
-                <img src={Avatar2} className='rounded-full border-4 border-secondary' width={100} alt="" />
-                <p className='text-center text-gray-500'>Gayet temiz ve huzurlu bir ortam, işletme sahipleri her konuda yardımcı oluyor. Üstelik köye de çok yakın, ihtiyaçları karşılamak 5 dakika. Yolu rahat.</p>
-                <span className='mt-auto'>seda çelebi</span>
+            <div className='flex flex-col gap-8 items-center h-full'>
+              <img src={Avatar2} className='rounded-full border-4 border-secondary' width={100} alt="" />
+              <p className='text-center text-gray-500'>Gayet temiz ve huzurlu bir ortam, işletme sahipleri her konuda yardımcı oluyor. Üstelik köye de çok yakın, ihtiyaçları karşılamak 5 dakika. Yolu rahat.</p>
+              <span className='mt-auto self-center'>seda çelebi</span>
             </div>
           </SwiperSlide>
         </Swiper>
       </div>
     </div>
-  )
+  );
 }
 
-export default Comments
+export default Comments;

@@ -7,12 +7,12 @@ module.exports = {
     extend: {
       keyframes: {
         slideDown: {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(0)' },
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
       animation: {
-        slideDown: 'slideDown 0.5s ease-out',
+        slideDown: 'slideDown 0.3s ease-out',
       },
       colors: {
         primary: "#40A578",
