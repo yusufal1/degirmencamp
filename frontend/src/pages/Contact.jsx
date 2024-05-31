@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { IoMdMail } from "react-icons/io";
 import { sendContactForm } from '../api/contactApi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -22,7 +24,16 @@ const Contact = () => {
     e.preventDefault();
     try {
       await sendContactForm(formData);
-      alert(t('formSubmitted'));
+      toast.success('Mesajınız başarıyla gönderildi.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
       setFormData({
         fullname: '',
         phoneNumber: '',
@@ -30,7 +41,16 @@ const Contact = () => {
         message: ''
       });
     } catch (error) {
-      alert(t('formSubmissionFailed'));
+      toast.error('Lütfen tüm alanları doldurunuz!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   };
 
@@ -97,6 +117,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
