@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { sendBookingForm } from '../api/bookingApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from './LoadingSpinner';
 
 const Booking = () => {
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -24,6 +26,7 @@ const Booking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       await sendBookingForm(formData);
       toast.success('Rezervasyonunuz başarıyla oluşturuldu.', {
@@ -57,6 +60,8 @@ const Booking = () => {
             progress: undefined,
             theme: "light",
             });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -162,7 +167,8 @@ const Booking = () => {
             onChange={handleChange}
           />
         </div>
-        <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>
+        {loading ? <div className='flex items-center justify-center'><LoadingSpinner/></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>}
+        
       </form>
       <ToastContainer />
     </div>
