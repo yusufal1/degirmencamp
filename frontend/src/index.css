@@ -40,6 +40,12 @@
   .footer-hover-links {
     @apply hover:text-secondary duration-300
   }
+  .admin-links {
+    @apply bg-gray-700 p-3 bg-opacity-50 rounded-lg
+  }
+  .bookings-table-th {
+    @apply border text-left p-2 text-white bg-black
+  }
 }
 
 .carousel .slide img {

@@ -11,3 +11,12 @@ exports.saveBooking = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort('-createdAt');
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
