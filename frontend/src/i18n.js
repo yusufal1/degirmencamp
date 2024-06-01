@@ -63,7 +63,8 @@ const resources = {
       "answer1": "Nightly prices of the bungalows are 2500TL and 3000TL including breakfast. (Except holidays) Click <1>here</1> for detailed information.",
       "answer2": "Our facility has 6 bungalows, restaurant, parking area and camping area. Click <1>here</1> for detailed information.",
       "answer3": "You can get directions to our facility by clicking the <1>'Directions'</1> button on our page or by clicking on the map in the 'contact' section.",
-      
+      "checkIn": "Check-In Date",
+      "checkOut": "Check-Out Date",
     }
   },
   tr: {
@@ -123,7 +124,8 @@ const resources = {
       "answer1": "Bungalovların gecelik fiyatları kahvaltı dahil 2500TL ve 3000TL'dir. (Tatil günleri hariç) Detaylı bilgi için <1>buraya</1> tıklayınız.",
       "answer2": "Tesisimizde 6 adet bungalov, restoran, otopark alanı ve kamp alanı bulunmaktadır. Detaylı bilgi için <1>buraya</1> tıklayınız.",
       "answer3": "Sayfamızda yer alan <1>'Yol Tarifi'</1> butonu tıklayarak ya da 'iletişim' bölümünde yer alan haritaya tıklayarak tesisimiz için yol tarifi alabilirsiniz.",
-
+      "checkIn": "Giriş Tarihi",
+      "checkOut": "Çıkış Tarihi",
     }
   }
 };

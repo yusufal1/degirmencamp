@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sendBookingForm } from '../api/bookingApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from './LoadingSpinner';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+import axios from 'axios';
 
 const Booking = () => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -18,17 +22,55 @@ const Booking = () => {
     numberOfAdults: 1,
     numberOfChildren: 0
   });
+  const [bookedDates, setBookedDates] = useState([]);
+
+  useEffect(() => {
+    const fetchBookedDates = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/booking');
+        const bookings = response.data;
+        const dates = [];
+
+        bookings.forEach(booking => {
+          const currentDate = moment(booking.checkIn);
+          const end = moment(booking.checkOut);
+          while (currentDate.isSameOrBefore(end, 'day')) {
+            dates.push(currentDate.clone().toDate());
+            currentDate.add(1, 'days');
+          }
+        });
+
+        setBookedDates(dates);
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    fetchBookedDates();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleDateChange = (date, name) => {
+    setFormData({ ...formData, [name]: date });
+  };
+
+  const isDateBooked = date => {
+    return bookedDates.some(bookedDate => moment(bookedDate).isSame(date, 'day'));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     try {
-      await sendBookingForm(formData);
+      await sendBookingForm({
+        ...formData,
+        checkIn: moment(formData.checkIn).format('YYYY-MM-DD'),
+        checkOut: moment(formData.checkOut).format('YYYY-MM-DD')
+      });
       toast.success('Rezervasyonunuz başarıyla oluşturuldu.', {
         position: "top-right",
         autoClose: 3000,
@@ -38,7 +80,7 @@ const Booking = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
       setFormData({
         fullname: '',
         email: '',
@@ -50,16 +92,16 @@ const Booking = () => {
         numberOfChildren: 0
       });
     } catch (error) {
-        toast.error(error.response.data.error, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
+      toast.error(error.response.data.error, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } finally {
       setLoading(false);
     }
@@ -121,24 +163,26 @@ const Booking = () => {
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkIn'>{t('checkIn')}</label>
-          <input
-            type="date"
-            id='checkIn'
-            name='checkIn'
+          <DatePicker
+            selected={formData.checkIn}
+            onChange={date => handleDateChange(date, 'checkIn')}
+            filterDate={date => !isDateBooked(date)}
+            dateFormat="dd.MM.yyyy"
+            minDate={new Date()}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            value={formData.checkIn}
-            onChange={handleChange}
+            id='checkIn'
           />
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkOut'>{t('checkOut')}</label>
-          <input
-            type="date"
-            id='checkOut'
-            name='checkOut'
+          <DatePicker
+            selected={formData.checkOut}
+            onChange={date => handleDateChange(date, 'checkOut')}
+            filterDate={date => !isDateBooked(date)}
+            dateFormat="dd.MM.yyyy"
+            minDate={formData.checkIn || new Date()}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            value={formData.checkOut}
-            onChange={handleChange}
+            id='checkOut'
           />
         </div>
         <div className='flex flex-col gap-1'>
@@ -167,8 +211,7 @@ const Booking = () => {
             onChange={handleChange}
           />
         </div>
-        {loading ? <div className='flex items-center justify-center'><LoadingSpinner/></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>}
-        
+        {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>}
       </form>
       <ToastContainer />
     </div>

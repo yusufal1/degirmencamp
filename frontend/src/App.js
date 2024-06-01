@@ -50,6 +50,7 @@ const AdminLayout = () => (
   <Navigation/>
   <Routes>
     <Route exact path="/" element={<Bookings />} />
+    <Route exact path="/rezervasyonlar" element={<Bookings />} />
   </Routes>
   </div>
 );
