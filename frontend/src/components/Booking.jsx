@@ -8,21 +8,29 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import axios from 'axios';
+import { useForm, Controller, watch } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const validationSchema = yup.object().shape({
+  fullname: yup.string().required('Ad Soyad zorunludur.'),
+  email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
+  phoneNumber: yup.string().matches(/^[0-9]{10}$/, 'Telefon numarası 10 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
+  checkIn: yup.date().required('Giriş tarihi zorunludur.').nullable(),
+  checkOut: yup.date().required('Çıkış tarihi zorunludur.').nullable(),
+  numberOfAdults: yup.number().min(1, 'En az 1 yetişkin olmalıdır.').required('Yetişkin sayısı zorunludur.'),
+  numberOfChildren: yup.number().min(0, 'Çocuk sayısı negatif olamaz.').required('Çocuk sayısı zorunludur.')
+});
 
 const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    phoneNumber: '',
-    bookingType: 'bungalow',
-    checkIn: '',
-    checkOut: '',
-    numberOfAdults: 1,
-    numberOfChildren: 0
-  });
   const [bookedDates, setBookedDates] = useState([]);
+  const { register, handleSubmit, control, formState: { errors }, watch } = useForm({
+    resolver: yupResolver(validationSchema)
+  });
+
+  const checkIn = watch("checkIn");
 
   useEffect(() => {
     const fetchBookedDates = async () => {
@@ -49,27 +57,17 @@ const Booking = () => {
     fetchBookedDates();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleDateChange = (date, name) => {
-    setFormData({ ...formData, [name]: date });
-  };
-
   const isDateBooked = date => {
     return bookedDates.some(bookedDate => moment(bookedDate).isSame(date, 'day'));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setLoading(true);
     try {
       await sendBookingForm({
-        ...formData,
-        checkIn: moment(formData.checkIn).format('YYYY-MM-DD'),
-        checkOut: moment(formData.checkOut).format('YYYY-MM-DD')
+        ...data,
+        checkIn: moment(data.checkIn).format('YYYY-MM-DD'),
+        checkOut: moment(data.checkOut).format('YYYY-MM-DD')
       });
       toast.success('Rezervasyonunuz başarıyla oluşturuldu.', {
         position: "top-right",
@@ -81,16 +79,7 @@ const Booking = () => {
         progress: undefined,
         theme: "light",
       });
-      setFormData({
-        fullname: '',
-        email: '',
-        phoneNumber: '',
-        bookingType: 'bungalow',
-        checkIn: '',
-        checkOut: '',
-        numberOfAdults: 1,
-        numberOfChildren: 0
-      });
+      // form reset işlemleri burada yapılabilir
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-right",
@@ -110,7 +99,7 @@ const Booking = () => {
   return (
     <div id='booking' className='bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col px-[10%]'>
       <h3 className='md:text-4xl text-2xl'>{t('booking')}</h3>
-      <form className='mt-[5%] grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8' onSubmit={handleSubmit}>
+      <form className='mt-[5%] grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col gap-1'>
           <label htmlFor='fullname'>{t('fullName')}</label>
           <input
@@ -119,9 +108,9 @@ const Booking = () => {
             name='fullname'
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='Ad Soyad'
-            value={formData.fullname}
-            onChange={handleChange}
+            {...register('fullname')}
           />
+          {errors.fullname && <span className='text-red-500 text-xs text-xs'>{errors.fullname.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='email'>{t('email')}</label>
@@ -131,9 +120,9 @@ const Booking = () => {
             name='email'
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='E-Posta'
-            value={formData.email}
-            onChange={handleChange}
+            {...register('email')}
           />
+          {errors.email && <span className='text-red-500 text-xs'>{errors.email.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='phoneNumber'>{t('phone')}</label>
@@ -143,9 +132,9 @@ const Booking = () => {
             name='phoneNumber'
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='Telefon'
-            value={formData.phoneNumber}
-            onChange={handleChange}
+            {...register('phoneNumber')}
           />
+          {errors.phoneNumber && <span className='text-red-500 text-xs'>{errors.phoneNumber.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='bookingType'>{t('reservationType')}</label>
@@ -153,8 +142,7 @@ const Booking = () => {
             name="bookingType"
             id="bookingType"
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            value={formData.bookingType}
-            onChange={handleChange}
+            {...register('bookingType')}
           >
             <option value="bungalow">{t('bungalow')}</option>
             <option value="tent">{t('tent')}</option>
@@ -163,27 +151,41 @@ const Booking = () => {
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkIn'>{t('checkIn')}</label>
-          <DatePicker
-            selected={formData.checkIn}
-            onChange={date => handleDateChange(date, 'checkIn')}
-            filterDate={date => !isDateBooked(date)}
-            dateFormat="dd.MM.yyyy"
-            minDate={new Date()}
-            className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            id='checkIn'
+          <Controller
+            control={control}
+            name="checkIn"
+            render={({ field }) => (
+              <DatePicker
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                filterDate={date => !isDateBooked(date)}
+                dateFormat="dd.MM.yyyy"
+                minDate={new Date()}
+                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+                id='checkIn'
+              />
+            )}
           />
+          {errors.checkIn && <span className='text-red-500 text-xs'>{errors.checkIn.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkOut'>{t('checkOut')}</label>
-          <DatePicker
-            selected={formData.checkOut}
-            onChange={date => handleDateChange(date, 'checkOut')}
-            filterDate={date => !isDateBooked(date)}
-            dateFormat="dd.MM.yyyy"
-            minDate={formData.checkIn || new Date()}
-            className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            id='checkOut'
+          <Controller
+            control={control}
+            name="checkOut"
+            render={({ field }) => (
+              <DatePicker
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                filterDate={date => !isDateBooked(date)}
+                dateFormat="dd.MM.yyyy"
+                minDate={checkIn || new Date()} // watch kullanılarak checkIn değerini alıyoruz
+                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+                id='checkOut'
+              />
+            )}
           />
+          {errors.checkOut && <span className='text-red-500 text-xs'>{errors.checkOut.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='numberOfAdults'>{t('adultNumber')}</label>
@@ -194,9 +196,9 @@ const Booking = () => {
             min={1}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='Yetişkin Sayısı'
-            value={formData.numberOfAdults}
-            onChange={handleChange}
+            {...register('numberOfAdults')}
           />
+          {errors.numberOfAdults && <span className='text-red-500 text-xs'>{errors.numberOfAdults.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='numberOfChildren'>{t('childrenNumber')}</label>
@@ -207,9 +209,9 @@ const Booking = () => {
             min={0}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='Çocuk Sayısı'
-            value={formData.numberOfChildren}
-            onChange={handleChange}
+            {...register('numberOfChildren')}
           />
+          {errors.numberOfChildren && <span className='text-red-500 text-xs'>{errors.numberOfChildren.message}</span>}
         </div>
         {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>}
       </form>
