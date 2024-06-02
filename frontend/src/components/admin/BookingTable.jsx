@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { FaSort } from "react-icons/fa";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
@@ -89,6 +90,18 @@ const BookingTable = () => {
     setSortConfig({ key, direction });
   };
 
+  const deleteBooking = async (id) => {
+    const confirmDelete = window.confirm('Bu rezervasyonu silmek istediğinizden emin misiniz?');
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:5000/api/booking/${id}`);
+        setBookings(bookings.filter((booking) => booking._id !== id));
+      } catch (error) {
+        console.error('Error deleting booking:', error);
+      }
+    }
+  };
+
   return (
     <div>
       <PDFDownloadLink className='border p-2 bg-primary text-white'
@@ -138,6 +151,7 @@ const BookingTable = () => {
             <th className='bookings-table-th' onClick={() => requestSort('phoneNumber')}>Telefon <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' onClick={() => requestSort('bookingType')}>Tip <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' onClick={() => requestSort('createdAt')}>Rezervasyon Oluşturma Tarihi <FaSort className='inline-block cursor-pointer'/></th>
+            <th className='bookings-table-th' >#</th>
           </tr>
         </thead>
         <tbody>
@@ -155,6 +169,9 @@ const BookingTable = () => {
               <td className='p-2 border-r'>{booking.bookingType}</td>
               <td className='p-2 border-r'>
                 <Moment format="DD.MM.YYYY">{booking.createdAt}</Moment>
+              </td>
+              <td className='p-2 border-r'>
+                <button onClick={() => deleteBooking(booking._id)}><RiDeleteBin6Fill/></button>
               </td>
             </tr>
           ))}
