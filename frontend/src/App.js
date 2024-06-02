@@ -14,6 +14,7 @@ import Faq from "./pages/Faq";
 import ScrollToTopButton from './components/ScrollToTopButton';
 import Bookings from "./pages/admin/Bookings";
 import Navigation from "./components/admin/Navigation";
+import ContactMessages from "./pages/admin/ContactMessages";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ const AdminLayout = () => (
   <Routes>
     <Route exact path="/" element={<Bookings />} />
     <Route exact path="/rezervasyonlar" element={<Bookings />} />
+    <Route exact path="/mesajlar" element={<ContactMessages />} />
   </Routes>
   </div>
 );
