@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+import Moment from 'react-moment'
 
 const customStyles = {
     content: {
@@ -50,7 +51,7 @@ const ContactMessages = () => {
     }, []);
 
     return (
-        <div className='flex flex-col items-center justify-center w-full'>
+        <div className='flex flex-col items-center justify-center w-full px-[10%]'>
             <h3 className='text-2xl'>Mesajlar</h3>
             <table className="table-auto w-full border mt-10">
             <thead>
@@ -58,6 +59,7 @@ const ContactMessages = () => {
                 <th className='bookings-table-th'>Ad Soyad</th>            
                 <th className='bookings-table-th'>Telefon</th>
                 <th className='bookings-table-th'>E-Posta</th>
+                <th className='bookings-table-th'>Tarih</th>
                 <th className='bookings-table-th'>Mesaj</th>
               </tr>
             </thead>
@@ -67,6 +69,7 @@ const ContactMessages = () => {
                   <td className='p-2 border-r'>{message.fullname}</td>
                   <td className='p-2 border-r'>{message.phoneNumber}</td>
                   <td className='p-2 border-r'>{message.email}</td>
+                  <td className='p-2 border-r'><Moment format="DD.MM.YYYY">{message.createdAt}</Moment></td>
                   <td className='p-2 border-r'>
                     <button onClick={() => openModal(message)}>Görüntüle</button>
                   </td>

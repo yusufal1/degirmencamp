@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Homepage from "./pages/Homepage";
@@ -15,15 +15,22 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import Bookings from "./pages/admin/Bookings";
 import Navigation from "./components/admin/Navigation";
 import ContactMessages from "./pages/admin/ContactMessages";
+import Login from "./pages/admin/Login";
+import ProtectedRoute from "./components/admin/ProtectedRoutes";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/*" element={<MainLayout />} />
-      </Routes>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/*" element={<MainLayout />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 
@@ -31,7 +38,7 @@ const MainLayout = () => (
   <>
     <Header />
     <Routes>
-      <Route exact path="/" element={<Homepage />} />
+      <Route path="/" element={<Homepage />} />
       <Route path="/hakkimizda" element={<About />} />
       <Route path="/seceneklerimiz" element={<Options />} />
       <Route path="/etkinliklerimiz" element={<OurEvents />} />
@@ -40,6 +47,7 @@ const MainLayout = () => (
       <Route path="/yorumlar" element={<CustomerComments />} />
       <Route path="/rezervasyon" element={<Reservation />} />
       <Route path="/sss" element={<Faq />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
     <ScrollToTopButton />
     <Footer />
@@ -48,12 +56,15 @@ const MainLayout = () => (
 
 const AdminLayout = () => (
   <div className="flex">
-  <Navigation/>
-  <Routes>
-    <Route exact path="/" element={<Bookings />} />
-    <Route exact path="/rezervasyonlar" element={<Bookings />} />
-    <Route exact path="/mesajlar" element={<ContactMessages />} />
-  </Routes>
+    <Navigation />
+    <Routes>
+      <Route path="/" element={<Navigate to="giris" />} />
+      <Route path="giris" element={<Login />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="rezervasyonlar" element={<Bookings />} />
+        <Route path="mesajlar" element={<ContactMessages />} />
+      </Route>
+    </Routes>
   </div>
 );
 

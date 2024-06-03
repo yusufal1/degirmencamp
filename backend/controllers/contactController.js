@@ -13,7 +13,7 @@ exports.saveContactForm = async (req, res) => {
 
 exports.getAllMessages = async (req, res) => {
   try {
-    const messages = await Contact.find()
+    const messages = await Contact.find().sort('-createdAt')
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: error.message });

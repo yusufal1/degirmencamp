@@ -45,7 +45,7 @@
   }
   .bookings-table-th {
     @apply border text-left p-2 text-white bg-black
-  }
+  }  
 }
 
 .carousel .slide img {
