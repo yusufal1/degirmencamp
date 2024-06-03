@@ -1,16 +1,16 @@
 const Booking = require('../models/Booking');
 const { body, validationResult } = require('express-validator');
 
-const validateBooking = [
-  body('fullname').notEmpty().withMessage('Ad Soyad zorunludur.'),
-  body('email').isEmail().withMessage('Geçerli bir e-posta adresi giriniz.'),
-  body('phoneNumber').matches(/^[0-9]{10}$/).withMessage('Telefon numarası 10 haneli olmalıdır.'),
-  body('bookingType').isIn(['bungalow', 'tent', 'caravan']).withMessage('Geçersiz rezervasyon tipi.'),
-  body('checkIn').isISO8601().toDate().withMessage('Geçerli bir giriş tarihi giriniz.'),
-  body('checkOut').isISO8601().toDate().withMessage('Geçerli bir çıkış tarihi giriniz.'),
-  body('numberOfAdults').isInt({ min: 1 }).withMessage('En az 1 yetişkin olmalıdır.'),
-  body('numberOfChildren').isInt({ min: 0 }).withMessage('Çocuk sayısı negatif olamaz.')
-];
+// const validateBooking = [
+//   body('fullname').notEmpty().withMessage('Ad Soyad zorunludur.'),
+//   body('email').isEmail().withMessage('Geçerli bir e-posta adresi giriniz.'),
+//   body('phoneNumber').matches(/^[0-9]{10}$/).withMessage('Telefon numarası 10 haneli olmalıdır.'),
+//   body('bookingType').isIn(['bungalow', 'tent', 'caravan']).withMessage('Geçersiz rezervasyon tipi.'),
+//   body('checkIn').isISO8601().toDate().withMessage('Geçerli bir giriş tarihi giriniz.'),
+//   body('checkOut').isISO8601().toDate().withMessage('Geçerli bir çıkış tarihi giriniz.'),
+//   body('numberOfAdults').isInt({ min: 1 }).withMessage('En az 1 yetişkin olmalıdır.'),
+//   body('numberOfChildren').isInt({ min: 0 }).withMessage('Çocuk sayısı negatif olamaz.')
+// ];
 
 exports.saveBooking = async (req, res) => {
   const errors = validationResult(req);

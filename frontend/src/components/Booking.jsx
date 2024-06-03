@@ -18,9 +18,16 @@ const validationSchema = yup.object().shape({
   phoneNumber: yup.string().matches(/^[0-9]{10}$/, 'Telefon numarası 10 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
   checkIn: yup.date().required('Giriş tarihi zorunludur.').nullable(),
   checkOut: yup.date().required('Çıkış tarihi zorunludur.').nullable(),
-  numberOfAdults: yup.number().min(1, 'En az 1 yetişkin olmalıdır.').required('Yetişkin sayısı zorunludur.'),
-  numberOfChildren: yup.number().min(0, 'Çocuk sayısı negatif olamaz.').required('Çocuk sayısı zorunludur.')
+  numberOfAdults: yup.number()
+    .typeError('Yetişkin sayısı sayısal bir değer olmalıdır.')
+    .min(1, 'En az 1 yetişkin olmalıdır.')
+    .required('Yetişkin sayısı zorunludur.'),
+  numberOfChildren: yup.number()
+    .typeError('Çocuk sayısı sayısal bir değer olmalıdır.')
+    .min(0, 'Çocuk sayısı negatif olamaz.')
+    .required('Çocuk sayısı zorunludur.')
 });
+
 
 const Booking = () => {
   const { t } = useTranslation();
@@ -79,7 +86,7 @@ const Booking = () => {
         progress: undefined,
         theme: "light",
       });
-      // form reset işlemleri burada yapılabilir
+      
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-right",
@@ -110,7 +117,7 @@ const Booking = () => {
             placeholder='Ad Soyad'
             {...register('fullname')}
           />
-          {errors.fullname && <span className='text-red-500 text-xs text-xs'>{errors.fullname.message}</span>}
+          {errors.fullname && <span className='text-red-500 text-xs'>{errors.fullname.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='email'>{t('email')}</label>
