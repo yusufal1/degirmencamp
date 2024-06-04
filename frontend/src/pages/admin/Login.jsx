@@ -1,4 +1,3 @@
-// src/pages/admin/Login.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,15 +10,17 @@ const Login = () => {
     const [password, setPassword] = useState('');
   
     const handleLogin = () => {
-      const hardcodedUsername = 'admin';
-      const hardcodedPassword = 'password123';
+        const hardcodedUsername = process.env.REACT_APP_USERNAME;
+        const hardcodedPassword = process.env.REACT_APP_PASSWORD;
   
-      if (username === hardcodedUsername && password === hardcodedPassword) {
-        dispatch(login());
-        navigate('/admin/rezervasyonlar');
-      } else {
-        alert('Kullanıcı adı veya şifre yanlış');
-      }
+        if (username === hardcodedUsername && password === hardcodedPassword) {
+            dispatch(login());
+            navigate('/admin/rezervasyonlar');
+        } else {
+            alert('Kullanıcı adı veya şifre yanlış');
+            console.log(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD);
+
+        }
     };
 
   return (

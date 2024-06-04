@@ -15,7 +15,7 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
 
   const validationSchema = yup.object().shape({
-    fullname: yup.string().required('Ad Soyad zorunludur.'),
+    fullname: yup.string().max(50,'En fazla 50 karakter girebilirsiniz.').required('Ad Soyad zorunludur.'),
     email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
     phoneNumber: yup.string().matches(/^[0-9]{10}$/, 'Telefon numarası 10 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
     message: yup.string().required('Mesaj zorunludur.').max(500, 'Mesaj en fazla 500 karakter olmalıdır.')
@@ -39,7 +39,7 @@ const Contact = () => {
         progress: undefined,
         theme: "light",
       });
-      reset();  // Formu sıfırlama işlemi burada yapılıyor
+      reset();
     } catch (error) {
       toast.error('Lütfen tüm alanları doldurunuz!', {
         position: "top-right",

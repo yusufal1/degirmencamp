@@ -13,7 +13,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const validationSchema = yup.object().shape({
-  fullname: yup.string().required('Ad Soyad zorunludur.'),
+  fullname: yup.string().max(50, 'En fazla 50 karakter girebilirsiniz.').required('Ad Soyad zorunludur.'),
   email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
   phoneNumber: yup.string().matches(/^[0-9]{10}$/, 'Telefon numarası 10 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
   checkIn: yup.date().required('Giriş tarihi zorunludur.').nullable(),
