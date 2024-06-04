@@ -21,10 +21,12 @@ const validationSchema = yup.object().shape({
   numberOfAdults: yup.number()
     .typeError('Yetişkin sayısı sayısal bir değer olmalıdır.')
     .min(1, 'En az 1 yetişkin olmalıdır.')
+    .max(3, 'En fazla 3 yetişkin olabilir.')
     .required('Yetişkin sayısı zorunludur.'),
   numberOfChildren: yup.number()
     .typeError('Çocuk sayısı sayısal bir değer olmalıdır.')
     .min(0, 'Çocuk sayısı negatif olamaz.')
+    .max(2, 'En fazla 2 çocuk olabilir')
     .required('Çocuk sayısı zorunludur.')
 });
 
@@ -33,7 +35,7 @@ const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [bookedDates, setBookedDates] = useState([]);
-  const { register, handleSubmit, control, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
     resolver: yupResolver(validationSchema)
   });
 
@@ -86,7 +88,7 @@ const Booking = () => {
         progress: undefined,
         theme: "light",
       });
-      
+      reset();
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-right",
