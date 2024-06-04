@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import axios from 'axios';
-import { useForm, Controller, watch } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -30,16 +30,14 @@ const validationSchema = yup.object().shape({
     .required('Çocuk sayısı zorunludur.')
 });
 
-
 const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [bookedDates, setBookedDates] = useState([]);
-  const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
+  const [totalBungalows, setTotalBungalows] = useState(6);
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema)
   });
-
-  const checkIn = watch("checkIn");
 
   useEffect(() => {
     const fetchBookedDates = async () => {
@@ -88,7 +86,6 @@ const Booking = () => {
         progress: undefined,
         theme: "light",
       });
-      reset();
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-right",
@@ -188,7 +185,7 @@ const Booking = () => {
                 onChange={(date) => field.onChange(date)}
                 filterDate={date => !isDateBooked(date)}
                 dateFormat="dd.MM.yyyy"
-                minDate={checkIn || new Date()} // watch kullanılarak checkIn değerini alıyoruz
+                minDate={new Date()}
                 className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
                 id='checkOut'
               />
