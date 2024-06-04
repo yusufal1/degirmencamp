@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../redux/auth/authSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -17,9 +18,16 @@ const Login = () => {
             dispatch(login());
             navigate('/admin/rezervasyonlar');
         } else {
-            alert('Kullanıcı adı veya şifre yanlış');
-            console.log(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD);
-
+          toast.error("Kullanıcı adı veya şifre yanlış!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
     };
 
@@ -44,6 +52,7 @@ const Login = () => {
       />
       <button onClick={handleLogin} className='border bg-primary text-white rounded-lg px-2 py-3'>Giriş Yap</button>
       </div>
+      <ToastContainer />
     </div>
   );
 };
