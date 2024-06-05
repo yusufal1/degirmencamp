@@ -40,7 +40,7 @@ const ContactMessages = () => {
     useEffect(() => {
         const fetchBookings = async () => {
           try {
-            const response = await axios.get('http://localhost:5000/api/contact');
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/contact`);
             setMessages(response.data);
           } catch (error) {
             console.error('Error fetching contacts:', error);

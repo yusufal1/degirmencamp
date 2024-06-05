@@ -56,7 +56,7 @@ const BookingTable = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/booking');
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/booking`);
         setBookings(response.data);
       } catch (error) {
         console.error('Error fetching bookings:', error);
@@ -94,7 +94,7 @@ const BookingTable = () => {
     const confirmDelete = window.confirm('Bu rezervasyonu silmek istediğinizden emin misiniz?');
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/booking/${id}`);
+        await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/booking/${id}`);
         setBookings(bookings.filter((booking) => booking._id !== id));
       } catch (error) {
         console.error('Error deleting booking:', error);
