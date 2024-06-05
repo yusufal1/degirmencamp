@@ -7,7 +7,7 @@ dotenv.config();
 const app = express()
 
 //Middleware
-app.use(cors({ origin: 'https://degirmencamp.vercel.app/' }));
+app.use(cors({ origin: 'https://degirmencamp.vercel.app' }));
 app.use(express.json());
 app.use(express.static('public'));
 
