@@ -21,27 +21,13 @@ exports.saveBooking = async (req, res) => {
   const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren } = req.body;
 
   try {
-    // Belirtilen tarih aralığında tüm bungalovlar için rezervasyonları kontrol et
-    let bungalovNumber = null;
-
-    for (let i = 1; i <= 6; i++) {
-      const existingBookings = await Booking.find({
-        bungalovNumber: i,
-        checkIn: { $lte: checkOut },
-        checkOut: { $gte: checkIn }
-      });
-
-      if (existingBookings.length === 0) {
-        bungalovNumber = i;
-        break;
-      }
-    }
-
-    if (bungalovNumber === null) {
+    const existingBookings = await Booking.find({
+      checkIn: { $lte: checkOut },
+      checkOut: { $gte: checkIn }
+    });
+    if (existingBookings.length >= 6) {
       return res.status(400).json({ error: 'Seçilen tarihler arasında tüm bungalovlar doludur.' });
     }
-
-    // Yeni rezervasyonu oluştur
     const newBooking = new Booking({
       fullname,
       email,
@@ -50,15 +36,13 @@ exports.saveBooking = async (req, res) => {
       checkIn,
       checkOut,
       numberOfAdults,
-      numberOfChildren,
-      bungalovNumber
+      numberOfChildren
     });
-
     await newBooking.save();
-    res.status(201).json({ message: 'Rezervasyon başarıyla oluşturuldu.' });
+    res.status(201).json({ message: 'Booking submitted successfully' });
   } catch (error) {
-    console.error('Rezervasyon kaydedilirken hata oluştu:', error);
-    res.status(500).json({ error: 'Sunucu Hatası' });
+    console.error('Error saving booking:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
