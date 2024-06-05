@@ -44,7 +44,7 @@ const Booking = () => {
   useEffect(() => {
     const fetchBookedDates = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/booking');
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/booking`);
         const bookings = response.data;
         const dates = [];
 
