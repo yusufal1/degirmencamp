@@ -15,6 +15,7 @@ app.use(express.static('public'));
 // Routes
 app.use('/api', require('./routes'));
 
+
 //Database connection
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {

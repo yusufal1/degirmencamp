@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { IoMdMail } from "react-icons/io";
-import { sendContactForm } from '../api/contactApi';
+import { FaLocationDot } from "react-icons/fa6"
+import { sendContactMail } from '../api/contactApi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -19,8 +19,7 @@ const Contact = () => {
     email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
     phoneNumber: yup.string().matches(/^0[0-9]{10}$/, 'Telefon numarası 0 ile başlamalı ve 11 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
     message: yup.string().required('Mesaj zorunludur.').max(500, 'Mesaj en fazla 500 karakter olmalıdır.')
-});
-
+  });
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema)
@@ -29,7 +28,7 @@ const Contact = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await sendContactForm(data);
+      await sendContactMail(data);
       toast.success('Mesajınız başarıyla gönderildi.', {
         position: "top-right",
         autoClose: 3000,
@@ -113,12 +112,6 @@ const Contact = () => {
               <FaLocationDot className='sm:w-6 sm:h-6 w-4 h-4' color='white' />
             </div>
             <address className='sm:text-base text-xs'>Değirmen kamp kazdağları, Zeytinli, 72. Sk. No:1, 10300 Edremit/Balıkesir</address>
-          </div>
-          <div className='flex gap-4 items-center'>
-            <div className='p-4 bg-[#54bb8d] rounded-full'>
-              <FaPhone className='sm:w-6 sm:h-6 w-4 h-4' color='white' />
-            </div>
-            <span className='sm:text-base text-xs'>+90 535 411 30 12</span>
           </div>
           <div className='flex gap-4 items-center'>
             <div className='p-4 bg-[#54bb8d] rounded-full'>
