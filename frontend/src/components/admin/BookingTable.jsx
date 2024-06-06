@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import { FaSort } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
   page: {
@@ -140,6 +141,21 @@ const BookingTable = () => {
         {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download PDF')}
       </PDFDownloadLink>
 
+      <div className='flex flex-col gap-5 mt-10'>
+        <div className='flex flex-row gap-4'>
+          <span className='w-5 h-5 bg-primary'></span>
+          <span>Mevcut</span>
+        </div>
+        <div className='flex flex-row gap-4'>
+          <span className='w-5 h-5 bg-yellow-500'></span>
+          <span>Gelecek</span>
+        </div>
+        <div className='flex flex-row gap-4'>
+          <span className='w-5 h-5 bg-red-500'></span>
+          <span>Geçmiş</span>
+        </div>
+      </div>
+
       {/* Tablo */}
       <table className="table-auto w-full border mt-10">
         <thead>
@@ -155,26 +171,41 @@ const BookingTable = () => {
           </tr>
         </thead>
         <tbody>
-          {sortedBookings.map((booking) => (
-            <tr key={booking._id} className='border text-sm'>
-              <td className='p-2 border-r'>{booking.fullname}</td>
-              <td className='p-2 border-r'>
-                <Moment format="DD.MM.YYYY">{booking.checkIn}</Moment>
-              </td>
-              <td className='p-2 border-r'>
-                <Moment format="DD.MM.YYYY">{booking.checkOut}</Moment>
-              </td>
-              <td className='p-2 border-r'>{booking.email}</td>
-              <td className='p-2 border-r'>{booking.phoneNumber}</td>
-              <td className='p-2 border-r'>{booking.bookingType}</td>
-              <td className='p-2 border-r'>
-                <Moment format="DD.MM.YYYY">{booking.createdAt}</Moment>
-              </td>
-              <td className='p-2 border-r'>
-                <button onClick={() => deleteBooking(booking._id)}><RiDeleteBin6Fill/></button>
-              </td>
-            </tr>
-          ))}
+        {sortedBookings.map((booking) => {
+  const today = moment().startOf('day');
+  const checkInDate = moment(booking.checkIn).startOf('day');
+  let rowClass = '';
+
+  if (checkInDate.isSame(today, 'day')) {
+    rowClass = 'bg-primary'; // Bugün gelen rezervasyonlar için
+  } else if (checkInDate.isAfter(today, 'day')) {
+    rowClass = 'bg-yellow-500'; // Gelecek rezervasyonlar için
+  } else if (checkInDate.isBefore(today, 'day')) {
+    rowClass = 'bg-red-500'; // Geçmiş rezervasyonlar için
+  }
+
+  return (
+    <tr key={booking._id} className={`border text-sm ${rowClass}`}>
+      <td className='p-2 border-r'>{booking.fullname}</td>
+      <td className='p-2 border-r'>
+        <Moment format="DD.MM.YYYY">{booking.checkIn}</Moment>
+      </td>
+      <td className='p-2 border-r'>
+        <Moment format="DD.MM.YYYY">{booking.checkOut}</Moment>
+      </td>
+      <td className='p-2 border-r'>{booking.email}</td>
+      <td className='p-2 border-r'>{booking.phoneNumber}</td>
+      <td className='p-2 border-r'>{booking.bookingType}</td>
+      <td className='p-2 border-r'>
+        <Moment format="DD.MM.YYYY">{booking.createdAt}</Moment>
+      </td>
+      <td className='p-2 border-r'>
+        <button onClick={() => deleteBooking(booking._id)}><RiDeleteBin6Fill/></button>
+      </td>
+    </tr>
+  );
+})}
+
         </tbody>
       </table>
     </div>
