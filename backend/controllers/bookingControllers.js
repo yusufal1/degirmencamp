@@ -1,5 +1,6 @@
 const Booking = require('../models/Booking');
 const { body, validationResult } = require('express-validator');
+const moment = require('moment')
 
 // const validateBooking = [
 //   body('fullname').notEmpty().withMessage('Ad Soyad zorunludur.'),
@@ -21,13 +22,48 @@ exports.saveBooking = async (req, res) => {
   const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren } = req.body;
 
   try {
+    // Belirtilen tarih aralığında bungalovların doluluğunu kontrol et
     const existingBookings = await Booking.find({
+      bookingType: 'bungalow',
       checkIn: { $lte: checkOut },
       checkOut: { $gte: checkIn }
     });
-    if (existingBookings.length >= 6) {
+
+    // Gruplayarak belirtilen tarih aralığında toplam bungalov sayısını kontrol et
+    const dateRange = [];
+    let currentDate = moment(checkIn);
+    const endDate = moment(checkOut);
+    while (currentDate.isSameOrBefore(endDate)) {
+      dateRange.push(currentDate.format('YYYY-MM-DD'));
+      currentDate = currentDate.add(1, 'days');
+    }
+
+    const bookedCounts = {};
+
+    dateRange.forEach(date => {
+      bookedCounts[date] = 0;
+    });
+
+    existingBookings.forEach(booking => {
+      const bookingStart = moment(booking.checkIn);
+      const bookingEnd = moment(booking.checkOut);
+      let date = bookingStart;
+
+      while (date.isSameOrBefore(bookingEnd)) {
+        const formattedDate = date.format('YYYY-MM-DD');
+        if (bookedCounts[formattedDate] !== undefined) {
+          bookedCounts[formattedDate]++;
+        }
+        date = date.add(1, 'days');
+      }
+    });
+
+    const isFullyBooked = dateRange.some(date => bookedCounts[date] >= 6);
+
+    if (isFullyBooked) {
       return res.status(400).json({ error: 'Seçilen tarihler arasında tüm bungalovlar doludur.' });
     }
+
     const newBooking = new Booking({
       fullname,
       email,
@@ -38,6 +74,7 @@ exports.saveBooking = async (req, res) => {
       numberOfAdults,
       numberOfChildren
     });
+
     await newBooking.save();
     res.status(201).json({ message: 'Booking submitted successfully' });
   } catch (error) {

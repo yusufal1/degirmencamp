@@ -46,28 +46,33 @@ const Booking = () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/booking`);
         const bookings = response.data;
-        const dates = [];
-
+        const dateCounts = {};
+  
         bookings.forEach(booking => {
           const currentDate = moment(booking.checkIn);
           const end = moment(booking.checkOut);
           while (currentDate.isSameOrBefore(end, 'day')) {
-            dates.push(currentDate.clone().toDate());
+            const dateString = currentDate.format('YYYY-MM-DD');
+            if (!dateCounts[dateString]) {
+              dateCounts[dateString] = 0;
+            }
+            dateCounts[dateString]++;
             currentDate.add(1, 'days');
           }
         });
-
-        setBookedDates(dates);
+  
+        setBookedDates(dateCounts);
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
     };
-
+  
     fetchBookedDates();
   }, []);
 
   const isDateBooked = date => {
-    return bookedDates.some(bookedDate => moment(bookedDate).isSame(date, 'day'));
+    const dateString = moment(date).format('YYYY-MM-DD');
+    return bookedDates[dateString] >= 6;
   };
 
   const onSubmit = async (data) => {
@@ -160,21 +165,21 @@ const Booking = () => {
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkIn'>{t('checkIn')}</label>
-          <Controller
-            control={control}
-            name="checkIn"
-            render={({ field }) => (
-              <DatePicker
-                selected={field.value}
-                onChange={(date) => field.onChange(date)}
-                filterDate={date => !isDateBooked(date)}
-                dateFormat="dd.MM.yyyy"
-                minDate={new Date()}
-                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-                id='checkIn'
-              />
-            )}
+      <Controller
+        control={control}
+        name="checkIn"
+        render={({ field }) => (
+          <DatePicker
+            selected={field.value}
+            onChange={(date) => field.onChange(date)}
+            filterDate={date => !isDateBooked(date)}
+            dateFormat="dd.MM.yyyy"
+            minDate={new Date()}
+            className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+            id='checkIn'
           />
+        )}
+      />
           {errors.checkIn && <span className='text-red-500 text-xs'>{errors.checkIn.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
