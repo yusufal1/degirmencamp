@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import Moment from 'react-moment'
+import Moment from 'react-moment';
 
 const customStyles = {
     content: {
@@ -20,11 +20,23 @@ const ContactMessages = () => {
     const [messages, setMessages] = useState([]);
     const [modalIsOpen, setIsOpen] = useState(false);
     const [selectedMessage, setSelectedMessage] = useState(null);
+    const [readMessages, setReadMessages] = useState(() => {
+        // localStorage'dan okunan mesajları alın
+        const savedReadMessages = localStorage.getItem('readMessages');
+        return savedReadMessages ? JSON.parse(savedReadMessages) : [];
+    });
+
     let subtitle;
 
     function openModal(message) {
       setSelectedMessage(message);
       setIsOpen(true);
+      if (!readMessages.includes(message._id)) {
+        const newReadMessages = [...readMessages, message._id];
+        setReadMessages(newReadMessages);
+        // localStorage'a kaydet
+        localStorage.setItem('readMessages', JSON.stringify(newReadMessages));
+      }
     }
 
     function afterOpenModal() {
@@ -37,7 +49,7 @@ const ContactMessages = () => {
     }
 
     useEffect(() => {
-        const fetchBookings = async () => {
+        const fetchMessages = async () => {
           try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/contact`);
             setMessages(response.data);
@@ -46,7 +58,7 @@ const ContactMessages = () => {
           }
         };
 
-        fetchBookings();
+        fetchMessages();
     }, []);
 
     return (
@@ -64,7 +76,7 @@ const ContactMessages = () => {
             </thead>
             <tbody>
               {messages.map((message) => (
-                <tr key={message._id} className='border text-sm'>
+                <tr key={message._id} className={`border text-sm ${readMessages.includes(message._id) ? 'bg-primary' : ''}`}>
                   <td className='p-2 border-r'>{message.fullname}</td>
                   <td className='p-2 border-r'>{message.phoneNumber}</td>
                   <td className='p-2 border-r'>{message.email}</td>

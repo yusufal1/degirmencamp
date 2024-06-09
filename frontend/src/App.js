@@ -57,14 +57,16 @@ const MainLayout = () => (
 const AdminLayout = () => (
   <div className="flex">
     <Navigation />
-    <Routes>
-      <Route path="/" element={<Navigate to="giris" />} />
-      <Route path="giris" element={<Login />} />
-      <Route element={<ProtectedRoute />}>
-        <Route path="rezervasyonlar" element={<Bookings />} />
-        <Route path="mesajlar" element={<ContactMessages />} />
-      </Route>
-    </Routes>
+    <div className="ml-72 w-full p-8">
+      <Routes>
+        <Route path="/" element={<Navigate to="giris" />} />
+        <Route path="giris" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/rezervasyonlar" element={<Bookings />} />
+          <Route path="/mesajlar" element={<ContactMessages />} />
+        </Route>
+      </Routes>
+    </div>
   </div>
 );
 

@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const { body, validationResult } = require('express-validator');
 const moment = require('moment')
+const nodemailer = require('nodemailer')
 
 // const validateBooking = [
 //   body('fullname').notEmpty().withMessage('Ad Soyad zorunludur.'),
@@ -76,6 +77,52 @@ exports.saveBooking = async (req, res) => {
     });
 
     await newBooking.save();
+
+     // E-posta gönderme işlemi
+     let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'yusufal5558@gmail.com',
+        pass: 'icwi zsbv jsce nluh'
+      }
+    });
+
+    let mailOptions = {
+      from: 'yusufal5558@gmail.com',
+      to: email,
+      subject: 'Rezervasyon Bilgilendirme',
+      html: `<p>Sayın ${fullname},</p>
+             <p>Rezervasyonunuz başarıyla alınmıştır. Detaylar aşağıdaki gibidir:</p>
+             <p><strong>Rezervasyon Tipi:</strong> ${bookingType}</p>
+             <p><strong>Giriş Tarihi:</strong> ${moment(checkIn).format('DD.MM.YYYY')}</p>
+             <p><strong>Çıkış Tarihi:</strong> ${moment(checkOut).format('DD.MM.YYYY')}</p>
+             <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
+             <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
+             <p>Teşekkürler,</p>
+             <p>Rezervasyon Ekibi</p>`
+    };
+
+    // Admin'e gönderilecek e-posta
+    let adminMailOptions = {
+      from: 'yusufal5558@gmail.com',
+      to: 'yusufal5558@gmail.com', // Admin e-posta adresini buraya girin
+      subject: 'Yeni Rezervasyon Bildirimi',
+      html: `<p>Yeni bir rezervasyon yapılmıştır. Detaylar aşağıdaki gibidir:</p>
+             <p><strong>Ad Soyad:</strong> ${fullname}</p>
+             <p><strong>E-posta:</strong> ${email}</p>
+             <p><strong>Telefon:</strong> ${phoneNumber}</p>
+             <p><strong>Rezervasyon Tipi:</strong> ${bookingType}</p>
+             <p><strong>Giriş Tarihi:</strong> ${moment(checkIn).format('DD.MM.YYYY')}</p>
+             <p><strong>Çıkış Tarihi:</strong> ${moment(checkOut).format('DD.MM.YYYY')}</p>
+             <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
+             <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
+             <p>Teşekkürler,</p>
+             <p>Rezervasyon Sistemi</p>`
+    };
+
+    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(adminMailOptions);
+
     res.status(201).json({ message: 'Booking submitted successfully' });
   } catch (error) {
     console.error('Error saving booking:', error);

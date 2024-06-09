@@ -22,7 +22,7 @@ exports.saveContactForm = async (req, res) => {
       from: email,
       to: 'agpasha9@gmail.com',
       subject: 'İletişim Formu',
-      html: `<p>Gönderen: ${fullname}</p>
+      html: `<p>Gönderen Ad-Soyad: ${fullname}</p>
              <p>E-posta: ${email}</p>
              <p>Telefon: ${phoneNumber}</p>
              <p>Mesaj: ${message}</p>`

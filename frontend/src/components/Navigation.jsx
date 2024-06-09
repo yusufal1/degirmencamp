@@ -13,7 +13,7 @@ const Navigation = () => {
         <li>
           <a
             href="/"
-            className={`${selected === '/' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/' ? 'active' : 'hover:hover-links'}`}
           >
             {t('homepage')}
           </a>
@@ -21,7 +21,7 @@ const Navigation = () => {
         <li>
           <a
             href="/hakkimizda"
-            className={`${selected === '/hakkimizda' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/hakkimizda' ? 'active' : 'hover:hover-links'}`}
           >
             {t('about-us')}
           </a>
@@ -29,7 +29,7 @@ const Navigation = () => {
         <li>
           <a
             href="/seceneklerimiz"
-            className={`${selected === '/seceneklerimiz' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/seceneklerimiz' ? 'active' : 'hover:hover-links'}`}
           >
             {t('options')}
           </a>
@@ -37,7 +37,7 @@ const Navigation = () => {
         <li>
           <a
             href="/etkinliklerimiz"
-            className={`${selected === '/etkinliklerimiz' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/etkinliklerimiz' ? 'active' : 'hover:hover-links'}`}
           >
             {t('events')}
           </a>
@@ -45,7 +45,7 @@ const Navigation = () => {
         <li>
           <a
             href="/galeri"
-            className={`${selected === '/galeri' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/galeri' ? 'active' : 'hover:hover-links'}`}
           >
             {t('gallery')}
           </a>
@@ -53,7 +53,7 @@ const Navigation = () => {
         <li>
           <a
             href="/iletisim"
-            className={`${selected === '/iletisim' ? 'active' : ''} hover:hover-links`}
+            className={`${selected === '/iletisim' ? 'active' : 'hover:hover-links'}`}
           >
             {t('contact')}
           </a>

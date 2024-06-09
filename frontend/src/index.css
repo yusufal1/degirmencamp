@@ -246,3 +246,8 @@
   background: red;
   color: white;
 }
+
+.table-container {
+  height: calc(100vh - 200px); /* Ekran boyutuna göre yükseklik ayarlayın */
+  overflow-y: auto;
+}
