@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../../assets/images/degirmen-kamp-logo-siyah.png';
 import { FaAddressBook } from "react-icons/fa";
-import { MdMessage, MdEvent } from "react-icons/md";
+import { MdMessage, MdEvent, MdAdminPanelSettings } from "react-icons/md";
 import { GiMoneyStack } from "react-icons/gi";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,11 @@ const Navigation = () => {
     <div className='fixed top-0 left-0 h-screen bg-black text-white py-4 px-8 w-72 flex flex-col items-center'>
       <img src={Logo} alt="Logo" className='invert' width={100}/>
       <ul className='flex flex-col gap-4 mt-10 w-full'>
+      <a href="/admin/ayarlar" className='admin-links'>
+          <li className='flex gap-2 items-center'>
+            <MdAdminPanelSettings/> Admin Ayarları
+          </li>
+        </a>
         <a href="/admin/rezervasyonlar" className='admin-links'>
           <li className='flex gap-2 items-center'>
             <FaAddressBook/> Rezervasyonlar

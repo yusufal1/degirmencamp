@@ -21,6 +21,7 @@ import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import NotFound from "./pages/NotFound";
 import EventsContent from "./pages/admin/EventsContent";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ const AdminLayout = () => (
         <Route element={<ProtectedRoute />}>
           <Route path="/rezervasyonlar" element={<Bookings />} />
           <Route path="/mesajlar" element={<ContactMessages />} />
+          <Route path="/ayarlar" element={<AdminSettings />} />
           <Route path="/etkinlik-icerik" element={<EventsContent />} />
         </Route>
       </Routes>

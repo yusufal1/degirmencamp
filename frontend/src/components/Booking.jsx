@@ -34,7 +34,7 @@ const validationSchema = yup.object().shape({
 const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [bookedDates, setBookedDates] = useState([]);
+  const [bookedDates, setBookedDates] = useState({ dateCounts: {}, bungalowCount: 6 });
   const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
     resolver: yupResolver(validationSchema)
   });
@@ -47,6 +47,10 @@ const Booking = () => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/booking`);
         const bookings = response.data;
         const dateCounts = {};
+        let bungalowCount = 6;
+  
+        const settingsResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/admin/settings`);
+        bungalowCount = settingsResponse.data.bungalowCount || bungalowCount;
   
         bookings.forEach(booking => {
           const currentDate = moment(booking.checkIn);
@@ -61,7 +65,7 @@ const Booking = () => {
           }
         });
   
-        setBookedDates(dateCounts);
+        setBookedDates({ dateCounts, bungalowCount });
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
@@ -72,8 +76,9 @@ const Booking = () => {
 
   const isDateBooked = date => {
     const dateString = moment(date).format('YYYY-MM-DD');
-    return bookedDates[dateString] >= 6;
+    return bookedDates.dateCounts[dateString] >= bookedDates.bungalowCount;
   };
+  
 
   const onSubmit = async (data) => {
     setLoading(true);

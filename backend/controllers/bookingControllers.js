@@ -2,17 +2,7 @@ const Booking = require('../models/Booking');
 const { body, validationResult } = require('express-validator');
 const moment = require('moment')
 const nodemailer = require('nodemailer')
-
-// const validateBooking = [
-//   body('fullname').notEmpty().withMessage('Ad Soyad zorunludur.'),
-//   body('email').isEmail().withMessage('Geçerli bir e-posta adresi giriniz.'),
-//   body('phoneNumber').matches(/^[0-9]{10}$/).withMessage('Telefon numarası 10 haneli olmalıdır.'),
-//   body('bookingType').isIn(['bungalow', 'tent', 'caravan']).withMessage('Geçersiz rezervasyon tipi.'),
-//   body('checkIn').isISO8601().toDate().withMessage('Geçerli bir giriş tarihi giriniz.'),
-//   body('checkOut').isISO8601().toDate().withMessage('Geçerli bir çıkış tarihi giriniz.'),
-//   body('numberOfAdults').isInt({ min: 1 }).withMessage('En az 1 yetişkin olmalıdır.'),
-//   body('numberOfChildren').isInt({ min: 0 }).withMessage('Çocuk sayısı negatif olamaz.')
-// ];
+const AdminSettings = require('../models/AdminSettings')
 
 exports.saveBooking = async (req, res) => {
   const errors = validationResult(req);
@@ -21,16 +11,17 @@ exports.saveBooking = async (req, res) => {
   }
 
   const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren } = req.body;
-
+  
   try {
-    // Belirtilen tarih aralığında bungalovların doluluğunu kontrol et
+    const adminSettings = await AdminSettings.findOne({ name: 'bungalowCount' });
+    const bungalowCount = adminSettings ? adminSettings.value : 6;
+
     const existingBookings = await Booking.find({
       bookingType: 'bungalow',
       checkIn: { $lte: checkOut },
       checkOut: { $gte: checkIn }
     });
 
-    // Gruplayarak belirtilen tarih aralığında toplam bungalov sayısını kontrol et
     const dateRange = [];
     let currentDate = moment(checkIn);
     const endDate = moment(checkOut);
@@ -59,7 +50,7 @@ exports.saveBooking = async (req, res) => {
       }
     });
 
-    const isFullyBooked = dateRange.some(date => bookedCounts[date] >= 6);
+    const isFullyBooked = dateRange.some(date => bookedCounts[date] >= bungalowCount);
 
     if (isFullyBooked) {
       return res.status(400).json({ error: 'Seçilen tarihler arasında tüm bungalovlar doludur.' });
@@ -78,8 +69,7 @@ exports.saveBooking = async (req, res) => {
 
     await newBooking.save();
 
-     // E-posta gönderme işlemi
-     let transporter = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'yusufal5558@gmail.com',
@@ -102,10 +92,9 @@ exports.saveBooking = async (req, res) => {
              <p>Rezervasyon Ekibi</p>`
     };
 
-    // Admin'e gönderilecek e-posta
     let adminMailOptions = {
       from: 'yusufal5558@gmail.com',
-      to: 'yusufal5558@gmail.com', // Admin e-posta adresini buraya girin
+      to: 'yusufal5558@gmail.com',
       subject: 'Yeni Rezervasyon Bildirimi',
       html: `<p>Yeni bir rezervasyon yapılmıştır. Detaylar aşağıdaki gibidir:</p>
              <p><strong>Ad Soyad:</strong> ${fullname}</p>

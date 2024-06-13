@@ -174,15 +174,16 @@ const BookingTable = () => {
         {sortedBookings.map((booking) => {
   const today = moment().startOf('day');
   const checkInDate = moment(booking.checkIn).startOf('day');
-  let rowClass = '';
+    const checkOutDate = moment(booking.checkOut).startOf('day');
+    let rowClass = '';
 
-  if (checkInDate.isSame(today, 'day')) {
-    rowClass = 'bg-primary'; // Bugün gelen rezervasyonlar için
-  } else if (checkInDate.isAfter(today, 'day')) {
-    rowClass = 'bg-yellow-500'; // Gelecek rezervasyonlar için
-  } else if (checkInDate.isBefore(today, 'day')) {
-    rowClass = 'bg-red-500'; // Geçmiş rezervasyonlar için
-  }
+    if (checkOutDate.isBefore(today, 'day')) {
+      rowClass = 'bg-red-500';
+    } else if (checkInDate.isSameOrBefore(today, 'day') && checkOutDate.isSameOrAfter(today, 'day')) {
+      rowClass = 'bg-primary';
+    } else if (checkInDate.isAfter(today, 'day')) {
+      rowClass = 'bg-yellow-500';
+    }
 
   return (
     <tr key={booking._id} className={`border text-sm ${rowClass}`}>
