@@ -20,15 +20,18 @@ import ProtectedRoute from "./components/admin/ProtectedRoutes";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 import NotFound from "./pages/NotFound";
+import EventsContent from "./pages/admin/EventsContent";
 
 function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Routes>
-          <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/*" element={<MainLayout />} />
-        </Routes>
+        <div className="App">
+          <Routes>
+            <Route path="/admin/*" element={<AdminLayout />} />
+            <Route path="/*" element={<MainLayout />} />
+          </Routes>
+        </div>
       </Router>
     </Provider>
   );
@@ -37,20 +40,22 @@ function App() {
 const MainLayout = () => (
   <>
     <Header />
-    <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/hakkimizda" element={<About />} />
-      <Route path="/seceneklerimiz" element={<Options />} />
-      <Route path="/etkinliklerimiz" element={<OurEvents />} />
-      <Route path="/galeri" element={<Gallery />} />
-      <Route path="/iletisim" element={<Contact />} />
-      <Route path="/yorumlar" element={<CustomerComments />} />
-      <Route path="/rezervasyon" element={<Reservation />} />
-      <Route path="/sss" element={<Faq />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <ScrollToTopButton />
-    <Footer />
+    <div className="MainContent">
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/hakkimizda" element={<About />} />
+        <Route path="/seceneklerimiz" element={<Options />} />
+        <Route path="/etkinliklerimiz" element={<OurEvents />} />
+        <Route path="/galeri" element={<Gallery />} />
+        <Route path="/iletisim" element={<Contact />} />
+        <Route path="/yorumlar" element={<CustomerComments />} />
+        <Route path="/rezervasyon" element={<Reservation />} />
+        <Route path="/sss" element={<Faq />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <ScrollToTopButton />
+      <Footer />
+    </div>
   </>
 );
 
@@ -64,6 +69,7 @@ const AdminLayout = () => (
         <Route element={<ProtectedRoute />}>
           <Route path="/rezervasyonlar" element={<Bookings />} />
           <Route path="/mesajlar" element={<ContactMessages />} />
+          <Route path="/etkinlik-icerik" element={<EventsContent />} />
         </Route>
       </Routes>
     </div>

@@ -2,14 +2,17 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fileUpload = require('express-fileupload')
+const path = require('path');
 
 dotenv.config();
 const app = express()
 
 //Middleware
+app.use('/assets', express.static(path.join(__dirname, '../frontend/src/assets')));
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
-app.use(express.static('public'));
+app.use(fileUpload());
 
 
 // Routes

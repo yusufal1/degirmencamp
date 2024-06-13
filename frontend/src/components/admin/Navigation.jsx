@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../../assets/images/degirmen-kamp-logo-siyah.png';
 import { FaAddressBook } from "react-icons/fa";
-import { MdMessage } from "react-icons/md";
+import { MdMessage, MdEvent } from "react-icons/md";
 import { GiMoneyStack } from "react-icons/gi";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +33,11 @@ const Navigation = () => {
         <a href="/" className='admin-links'>
           <li className='flex gap-2 items-center'>
             <GiMoneyStack/> Ciro
+          </li>
+        </a>
+        <a href="/admin/etkinlik-icerik" className='admin-links'>
+          <li className='flex gap-2 items-center'>
+            <MdEvent/> Etkinlikler
           </li>
         </a>
       </ul>
