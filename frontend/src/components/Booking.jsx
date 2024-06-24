@@ -12,13 +12,12 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateBungalowPrice, updateTentPrice, updateCaravanPrice } from '../redux/pricing/pricingSlice';
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().max(50, 'En fazla 50 karakter girebilirsiniz.').required('Ad Soyad zorunludur.'),
   email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
   phoneNumber: yup.string().matches(/^0[0-9]{10}$/, 'Telefon numarası 0 ile başlamalı ve 11 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
-  bookingType: yup.string().oneOf(['bungalow', 'tent', 'caravan'], 'Geçersiz rezervasyon tipi').required('Rezervasyon tipi zorunludur.'),  
+  bookingType: yup.string().oneOf(['bungalow', 'tent', 'caravan'], 'Geçersiz rezervasyon tipi').required('Rezervasyon tipi zorunludur.'),
   checkIn: yup.date()
     .required('Giriş tarihi zorunludur.')
     .nullable()
@@ -54,7 +53,15 @@ const Booking = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [defaultBookingType] = useState('bungalow');
-  const { bungalowPrice, tentPrice, caravanPrice } = useSelector(state => state.pricing)
+  const {
+    bungalowPrice,
+    tentPrice,
+    tentPriceWithOwn,
+    tentPriceChildren,
+    tentPriceChildrenWithOwn,
+    caravanPrice,
+    caravanPriceWithExtra,
+  } = useSelector(state => state.pricing);
   const [bookedDates, setBookedDates] = useState({ dateCounts: {}, bungalowCount: 6 });
   const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
     resolver: yupResolver(validationSchema),
@@ -64,7 +71,10 @@ const Booking = () => {
   });
 
   const bookingType = watch('bookingType');
+  const tentOption = watch('tentOption');
   const checkIn = watch('checkIn');
+  const numberOfAdults = watch('numberOfAdults');
+  const numberOfChildren = watch('numberOfChildren');
 
   useEffect(() => {
     const fetchBookedDates = async () => {
@@ -73,10 +83,10 @@ const Booking = () => {
         const bookings = response.data;
         const dateCounts = {};
         let bungalowCount = 6;
-  
+
         const settingsResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/admin/settings`);
         bungalowCount = settingsResponse.data.bungalowCount || bungalowCount;
-  
+
         bookings.forEach(booking => {
           const currentDate = moment(booking.checkIn);
           const end = moment(booking.checkOut);
@@ -89,13 +99,13 @@ const Booking = () => {
             currentDate.add(1, 'days');
           }
         });
-  
+
         setBookedDates({ dateCounts, bungalowCount });
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
     };
-  
+
     fetchBookedDates();
   }, []);
 
@@ -104,31 +114,55 @@ const Booking = () => {
     return bookedDates.dateCounts[dateString] >= bookedDates.bungalowCount;
   };
 
+  const calculateTotalPrice = (bookingType, numberOfAdults, numberOfChildren, tentOption, checkIn, checkOut) => {
+    let totalPrice = 0;
+    const numberOfDays = moment(checkOut).diff(moment(checkIn), 'days');
+
+    switch (bookingType) {
+      case 'bungalow':
+        totalPrice = bungalowPrice * numberOfDays;
+        break;
+      case 'tent':
+        if (tentOption === 'notOwnTent') {
+          totalPrice = (tentPrice * numberOfAdults + tentPriceChildren * numberOfChildren) * numberOfDays;
+        } else {
+          totalPrice = (tentPriceWithOwn * numberOfAdults + tentPriceChildrenWithOwn * numberOfChildren) * numberOfDays;
+        }
+        break;
+      case 'caravan':
+        if (numberOfAdults > 2) {
+          totalPrice = caravanPriceWithExtra * numberOfDays;
+        } else {
+          totalPrice = caravanPrice * numberOfDays;
+        }
+        break;
+      default:
+        totalPrice = 0;
+        break;
+    }
+
+    return totalPrice;
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      let selectedPrice = 0;
-      switch (bookingType) {
-        case 'bungalow':
-          selectedPrice = bungalowPrice;
-          break;
-        case 'tent':
-          selectedPrice = tentPrice;
-          break;
-        case 'caravan':
-          selectedPrice = caravanPrice;
-          break;
-        default:
-          selectedPrice = 0;
-          break;
-      }
-      
+      const totalPrice = calculateTotalPrice(
+        data.bookingType,
+        data.numberOfAdults,
+        data.numberOfChildren,
+        data.tentOption,
+        data.checkIn,
+        data.checkOut
+      );
+
       await sendBookingForm({
         ...data,
-        price: selectedPrice,
+        price: totalPrice,
         checkIn: moment(data.checkIn).format('YYYY-MM-DD'),
         checkOut: moment(data.checkOut).format('YYYY-MM-DD')
       });
+
       toast.success('Rezervasyonunuz başarıyla oluşturuldu.', {
         position: "top-right",
         autoClose: 3000,
@@ -139,6 +173,7 @@ const Booking = () => {
         progress: undefined,
         theme: "light",
       });
+
       reset();
     } catch (error) {
       toast.error(error.response.data.error, {
@@ -155,6 +190,15 @@ const Booking = () => {
       setLoading(false);
     }
   };
+
+  const currentTotalPrice = calculateTotalPrice(
+    bookingType,
+    numberOfAdults,
+    numberOfChildren,
+    tentOption,
+    checkIn,
+    watch('checkOut')
+  );
 
   return (
     <div id='booking' className='bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col px-[10%]'>
@@ -218,7 +262,7 @@ const Booking = () => {
                 {t('haveTent')}
               </label>
               <label>
-                <input type="radio" name="tentOption" value="notOwnTent" {...register('tentOption')} />
+                <input type="radio" name="tentOption" value="notOwnTent" defaultChecked {...register('tentOption')} />
                 {t('notHaveTent')}
               </label>
             </div>
@@ -291,7 +335,7 @@ const Booking = () => {
           />
           {errors.numberOfChildren && <span className='error-message'>{errors.numberOfChildren.message}</span>}
         </div>
-        {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Ödeme Yap (<b>₺</b> {(bookingType === 'bungalow' ? bungalowPrice : bookingType === 'tent' ? tentPrice : caravanPrice).toFixed(2)})</button>}
+        {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Ödeme Yap (<b>₺</b> {currentTotalPrice.toFixed(2)})</button>}
       </form>
       <ToastContainer />
     </div>
