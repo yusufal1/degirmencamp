@@ -212,7 +212,6 @@ const Booking = () => {
             type="number"
             id='numberOfAdults'
             name='numberOfAdults'
-            min={1}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
             placeholder='Yetişkin Sayısı'
             {...register('numberOfAdults')}
