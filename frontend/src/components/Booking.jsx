@@ -8,16 +8,35 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import axios from 'axios';
-import { useForm, Controller, watch } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateBungalowPrice, updateTentPrice, updateCaravanPrice } from '../redux/pricing/pricingSlice';
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().max(50, 'En fazla 50 karakter girebilirsiniz.').required('Ad Soyad zorunludur.'),
   email: yup.string().email('Geçerli bir e-posta adresi giriniz.').required('E-posta zorunludur.'),
   phoneNumber: yup.string().matches(/^0[0-9]{10}$/, 'Telefon numarası 0 ile başlamalı ve 11 haneli olmalıdır.').required('Telefon numarası zorunludur.'),
-  checkIn: yup.date().required('Giriş tarihi zorunludur.').nullable(),
-  checkOut: yup.date().required('Çıkış tarihi zorunludur.').nullable(),
+  bookingType: yup.string().oneOf(['bungalow', 'tent', 'caravan'], 'Geçersiz rezervasyon tipi').required('Rezervasyon tipi zorunludur.'),  
+  checkIn: yup.date()
+    .required('Giriş tarihi zorunludur.')
+    .nullable()
+    .test('checkInNotEqualToCheckOut', 'Giriş tarihi çıkış tarihinden önce olmalıdır.', function(checkIn) {
+      const checkOut = this.parent.checkOut;
+      return !checkOut || moment(checkIn).isBefore(checkOut);
+    })
+    .test('checkInNotEqualToCheckOutSame', 'Giriş ve çıkış tarihleri aynı olamaz.', function(checkIn) {
+      const checkOut = this.parent.checkOut;
+      return !checkOut || !moment(checkIn).isSame(checkOut, 'day');
+    }),
+  checkOut: yup.date()
+    .required('Çıkış tarihi zorunludur.')
+    .nullable()
+    .test('checkOutNotEqualToCheckIn', 'Çıkış tarihi giriş tarihinden sonra olmalıdır.', function(checkOut) {
+      const checkIn = this.parent.checkIn;
+      return !checkIn || moment(checkOut).isAfter(checkIn);
+    }),
   numberOfAdults: yup.number()
     .typeError('Yetişkin sayısı sayısal bir değer olmalıdır.')
     .min(1, 'En az 1 yetişkin olmalıdır.')
@@ -30,16 +49,22 @@ const validationSchema = yup.object().shape({
     .required('Çocuk sayısı zorunludur.')
 });
 
-
 const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [defaultBookingType] = useState('bungalow');
+  const { bungalowPrice, tentPrice, caravanPrice } = useSelector(state => state.pricing)
   const [bookedDates, setBookedDates] = useState({ dateCounts: {}, bungalowCount: 6 });
   const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      bookingType: defaultBookingType
+    }
   });
 
-  const checkIn = watch("checkIn");
+  const bookingType = watch('bookingType');
+  const checkIn = watch('checkIn');
 
   useEffect(() => {
     const fetchBookedDates = async () => {
@@ -78,13 +103,29 @@ const Booking = () => {
     const dateString = moment(date).format('YYYY-MM-DD');
     return bookedDates.dateCounts[dateString] >= bookedDates.bungalowCount;
   };
-  
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
+      let selectedPrice = 0;
+      switch (bookingType) {
+        case 'bungalow':
+          selectedPrice = bungalowPrice;
+          break;
+        case 'tent':
+          selectedPrice = tentPrice;
+          break;
+        case 'caravan':
+          selectedPrice = caravanPrice;
+          break;
+        default:
+          selectedPrice = 0;
+          break;
+      }
+      
       await sendBookingForm({
         ...data,
+        price: selectedPrice,
         checkIn: moment(data.checkIn).format('YYYY-MM-DD'),
         checkOut: moment(data.checkOut).format('YYYY-MM-DD')
       });
@@ -129,7 +170,7 @@ const Booking = () => {
             placeholder='Ad Soyad'
             {...register('fullname')}
           />
-          {errors.fullname && <span className='text-red-500 text-xs'>{errors.fullname.message}</span>}
+          {errors.fullname && <span className='error-message'>{errors.fullname.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='email'>{t('email')}</label>
@@ -141,7 +182,7 @@ const Booking = () => {
             placeholder='E-Posta'
             {...register('email')}
           />
-          {errors.email && <span className='text-red-500 text-xs'>{errors.email.message}</span>}
+          {errors.email && <span className='error-message'>{errors.email.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='phoneNumber'>{t('phone')}</label>
@@ -153,7 +194,7 @@ const Booking = () => {
             placeholder='Telefon'
             {...register('phoneNumber')}
           />
-          {errors.phoneNumber && <span className='text-red-500 text-xs'>{errors.phoneNumber.message}</span>}
+          {errors.phoneNumber && <span className='error-message'>{errors.phoneNumber.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='bookingType'>{t('reservationType')}</label>
@@ -167,25 +208,41 @@ const Booking = () => {
             <option value="tent">{t('tent')}</option>
             <option value="caravan">{t('caravan')}</option>
           </select>
+          {errors.bookingType && <span className='error-message'>{errors.bookingType.message}</span>}
         </div>
+        {bookingType === 'tent' && (
+          <div className='flex flex-col gap-1 my-auto'>
+            <div className='flex gap-2 items-center justify-between'>
+              <label>
+                <input type="radio" name="tentOption" value="ownTent" {...register('tentOption')} />
+                {t('haveTent')}
+              </label>
+              <label>
+                <input type="radio" name="tentOption" value="notOwnTent" {...register('tentOption')} />
+                {t('notHaveTent')}
+              </label>
+            </div>
+            {errors.tentOption && <span className='error-message'>{errors.tentOption.message}</span>}
+          </div>
+        )}
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkIn'>{t('checkIn')}</label>
-      <Controller
-        control={control}
-        name="checkIn"
-        render={({ field }) => (
-          <DatePicker
-            selected={field.value}
-            onChange={(date) => field.onChange(date)}
-            filterDate={date => !isDateBooked(date)}
-            dateFormat="dd.MM.yyyy"
-            minDate={new Date()}
-            className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            id='checkIn'
+          <Controller
+            control={control}
+            name="checkIn"
+            render={({ field }) => (
+              <DatePicker
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                filterDate={date => !isDateBooked(date)}
+                dateFormat="dd.MM.yyyy"
+                minDate={new Date()}
+                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+                id='checkIn'
+              />
+            )}
           />
-        )}
-      />
-          {errors.checkIn && <span className='text-red-500 text-xs'>{errors.checkIn.message}</span>}
+          {errors.checkIn && <span className='error-message'>{errors.checkIn.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
           <label htmlFor='checkOut'>{t('checkOut')}</label>
@@ -198,44 +255,47 @@ const Booking = () => {
                 onChange={(date) => field.onChange(date)}
                 filterDate={date => !isDateBooked(date)}
                 dateFormat="dd.MM.yyyy"
-                minDate={checkIn || new Date()} // watch kullanılarak checkIn değerini alıyoruz
+                minDate={checkIn || new Date()}
                 className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
                 id='checkOut'
               />
             )}
           />
-          {errors.checkOut && <span className='text-red-500 text-xs'>{errors.checkOut.message}</span>}
+          {errors.checkOut && <span className='error-message'>{errors.checkOut.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='numberOfAdults'>{t('adultNumber')}</label>
+          <label htmlFor='numberOfAdults'>{t('numberOfAdults')}</label>
           <input
             type="number"
             id='numberOfAdults'
             name='numberOfAdults'
+            min={1}
+            max={3}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            placeholder='Yetişkin Sayısı'
+            placeholder={t('numberOfAdults')}
             {...register('numberOfAdults')}
           />
-          {errors.numberOfAdults && <span className='text-red-500 text-xs'>{errors.numberOfAdults.message}</span>}
+          {errors.numberOfAdults && <span className='error-message'>{errors.numberOfAdults.message}</span>}
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='numberOfChildren'>{t('childrenNumber')}</label>
+          <label htmlFor='numberOfChildren'>{t('numberOfChildren')}</label>
           <input
             type="number"
             id='numberOfChildren'
             name='numberOfChildren'
             min={0}
+            max={2}
             className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
-            placeholder='Çocuk Sayısı'
+            placeholder={t('numberOfChildren')}
             {...register('numberOfChildren')}
           />
-          {errors.numberOfChildren && <span className='text-red-500 text-xs'>{errors.numberOfChildren.message}</span>}
+          {errors.numberOfChildren && <span className='error-message'>{errors.numberOfChildren.message}</span>}
         </div>
-        {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>{t('send')}</button>}
+        {loading ? <div className='flex items-center justify-center'><LoadingSpinner /></div> : <button type='submit' className='rounded-2xl h-10 outline-none bg-secondary px-4 mt-auto'>Ödeme Yap (<b>₺</b> {(bookingType === 'bungalow' ? bungalowPrice : bookingType === 'tent' ? tentPrice : caravanPrice).toFixed(2)})</button>}
       </form>
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default Booking;

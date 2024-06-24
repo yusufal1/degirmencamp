@@ -10,7 +10,7 @@ exports.saveBooking = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren } = req.body;
+  const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren, tentOption } = req.body;
   
   try {
     const adminSettings = await AdminSettings.findOne({ name: 'bungalowCount' });
@@ -64,7 +64,8 @@ exports.saveBooking = async (req, res) => {
       checkIn,
       checkOut,
       numberOfAdults,
-      numberOfChildren
+      numberOfChildren,
+      tentOption
     });
 
     await newBooking.save();
@@ -89,7 +90,7 @@ exports.saveBooking = async (req, res) => {
              <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
              <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
              <p>Teşekkürler,</p>
-             <p>Rezervasyon Ekibi</p>`
+             <p>Değirmen Camping</p>`
     };
 
     let adminMailOptions = {
@@ -106,7 +107,7 @@ exports.saveBooking = async (req, res) => {
              <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
              <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
              <p>Teşekkürler,</p>
-             <p>Rezervasyon Sistemi</p>`
+             <p>Değirmen Camping</p>`
     };
 
     await transporter.sendMail(mailOptions);

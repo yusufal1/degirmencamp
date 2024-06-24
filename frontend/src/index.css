@@ -46,6 +46,9 @@
   .bookings-table-th {
     @apply border text-left p-2 text-white bg-black
   }  
+  .error-message {
+    @apply text-xs text-red-500 mt-1 whitespace-break-spaces break-words
+  }
 }
 
 .carousel .slide img {

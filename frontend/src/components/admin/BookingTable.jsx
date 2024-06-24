@@ -118,6 +118,7 @@ const BookingTable = () => {
                     <Text style={styles.tableHeader}>E-Posta</Text>
                     <Text style={styles.tableHeader}>Telefon</Text>
                     <Text style={styles.tableHeader}>Tip</Text>
+                    <Text style={styles.tableHeader}>Çadır Seçeneği</Text>
                     <Text style={styles.tableHeader}>Rezervasyon Oluşturma Tarihi</Text>
                   </View>
                   {sortedBookings.map((booking) => (
@@ -128,6 +129,7 @@ const BookingTable = () => {
                       <Text style={styles.tableCell}>{booking.email}</Text>
                       <Text style={styles.tableCell}>{booking.phoneNumber}</Text>
                       <Text style={styles.tableCell}>{booking.bookingType}</Text>
+                      <Text style={styles.tableCell}>{booking.bookingType === 'tent' ? booking.tentOption === 'ownTent' ? 'Kendi Çadırım' : 'Çadırım Yok' : 'N/A'}</Text>
                       <Text style={styles.tableCell}><Moment format="DD.MM.YYYY">{booking.createdAt}</Moment></Text>
                     </View>
                   ))}
@@ -166,6 +168,7 @@ const BookingTable = () => {
             <th className='bookings-table-th' onClick={() => requestSort('email')}>E-Posta <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' onClick={() => requestSort('phoneNumber')}>Telefon <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' onClick={() => requestSort('bookingType')}>Tip <FaSort className='inline-block cursor-pointer'/></th>
+            <th className='bookings-table-th' onClick={() => requestSort('tentOption')}>Çadır Seçeneği <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' onClick={() => requestSort('createdAt')}>Rezervasyon Oluşturma Tarihi <FaSort className='inline-block cursor-pointer'/></th>
             <th className='bookings-table-th' >#</th>
           </tr>
@@ -197,6 +200,7 @@ const BookingTable = () => {
       <td className='p-2 border-r'>{booking.email}</td>
       <td className='p-2 border-r'>{booking.phoneNumber}</td>
       <td className='p-2 border-r'>{booking.bookingType}</td>
+      <td className='p-2 border-r'>{booking.bookingType === 'tent' ? booking.tentOption === 'ownTent' ? 'Kendi Çadırım' : 'Çadırım Yok' : 'N/A'}</td>
       <td className='p-2 border-r'>
         <Moment format="DD.MM.YYYY">{booking.createdAt}</Moment>
       </td>
@@ -214,4 +218,3 @@ const BookingTable = () => {
 };
 
 export default BookingTable;
-

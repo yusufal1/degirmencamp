@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   bookingType: { type: String, enum: ['bungalow', 'tent', 'caravan'], required: true },
+  tentOption: { type: String, enum: ['ownTent', 'notOwnTent'], required: function() { return this.bookingType === 'tent'; } },
   checkIn: { type: Date, required: true },
   checkOut: { type: Date, required: true },
   numberOfAdults: { type: Number, required: true, min: 1 },

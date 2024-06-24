@@ -24,8 +24,8 @@ const resources = {
       "phone": "Phone",
       "reservationType": "Reservation Type",
       "in-out-time": "In-Out Time",
-      "adultNumber": "Number of Adults",
-      "childrenNumber": "Number of Children",
+      "numberOfAdults": "Number of Adults",
+      "numberOfChildren": "Number of Children",
       "send": "Send",
       "bungalow": "Bungalow",
       "tent": "Tent",
@@ -65,6 +65,8 @@ const resources = {
       "answer3": "You can get directions to our facility by clicking the <1>'Directions'</1> button on our page or by clicking on the map in the 'contact' section.",
       "checkIn": "Check-In Date",
       "checkOut": "Check-Out Date",
+      "haveTent": "I have tent",
+      "notHaveTent": "I don't have tent"
     }
   },
   tr: {
@@ -86,8 +88,8 @@ const resources = {
       "phone": "Telefon",
       "reservationType": "Rezervasyon Tipi",
       "in-out-time": "Giriş-Çıkış Zamanı",
-      "adultNumber": "Yetişkin Sayısı",
-      "childrenNumber": "Çocuk Sayısı",
+      "numberOfAdults": "Yetişkin Sayısı",
+      "numberOfChildren": "Çocuk Sayısı",
       "send": "Gönder",
       "bungalow": "Bungalov",
       "tent": "Çadır",
@@ -126,6 +128,8 @@ const resources = {
       "answer3": "Sayfamızda yer alan <1>'Yol Tarifi'</1> butonu tıklayarak ya da 'iletişim' bölümünde yer alan haritaya tıklayarak tesisimiz için yol tarifi alabilirsiniz.",
       "checkIn": "Giriş Tarihi",
       "checkOut": "Çıkış Tarihi",
+      "haveTent": "Çadırım var.",
+      "notHaveTent": "Çadırım yok."
     }
   }
 };
