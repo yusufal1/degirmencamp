@@ -3,12 +3,16 @@ import axios from 'axios';
 
 
 const AdminSettings = () => {
-  const [bungalowCount, setBungalowCount] = useState(6); // Başlangıç değeri 6 olarak varsayalım
+  const [bungalowCount, setBungalowCount] = useState(6);
+  const [tentCount, setTentCount] = useState(40);
+  const [caravanCount, setCaravanCount] = useState(4);
 
   const handleSave = async () => {
     try {
       await axios.put(`http://localhost:5000/api/admin/settings`, {
-        bungalowCount: bungalowCount
+        bungalowCount: bungalowCount,
+        tentCount: tentCount,
+        caravanCount: caravanCount
       });
       alert('Bungalov sayısı başarıyla güncellendi!');
     } catch (error) {
@@ -27,6 +31,22 @@ const AdminSettings = () => {
         id="bungalowCount"
         value={bungalowCount}
         onChange={(e) => setBungalowCount(parseInt(e.target.value))}
+      />
+      <label htmlFor="tentCount">Çadır Sayısı:</label>
+      <input
+      className='border p-4 border-gray-500'
+        type="number"
+        id="tentCount"
+        value={tentCount}
+        onChange={(e) => setTentCount(parseInt(e.target.value))}
+      />
+      <label htmlFor="caravanCount">Bungalov Sayısı:</label>
+      <input
+      className='border p-4 border-gray-500'
+        type="number"
+        id="caravanCount"
+        value={caravanCount}
+        onChange={(e) => setCaravanCount(parseInt(e.target.value))}
       />
       <button className='border p-4 border-gray-500' onClick={handleSave}>Kaydet</button>
     </div>

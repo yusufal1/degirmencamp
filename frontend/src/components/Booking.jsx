@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const validationSchema = yup.object().shape({
   fullname: yup.string().max(50, 'En fazla 50 karakter girebilirsiniz.').required('Ad Soyad zorunludur.'),
@@ -51,7 +51,6 @@ const validationSchema = yup.object().shape({
 const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const [defaultBookingType] = useState('bungalow');
   const {
     bungalowPrice,
@@ -62,7 +61,6 @@ const Booking = () => {
     caravanPrice,
     caravanPriceWithExtra,
   } = useSelector(state => state.pricing);
-  const [bookedDates, setBookedDates] = useState({ dateCounts: {}, bungalowCount: 6 });
   const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
