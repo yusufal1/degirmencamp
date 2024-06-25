@@ -110,8 +110,8 @@ exports.saveBooking = async (req, res) => {
              <p>Değirmen Camping</p>`
     };
 
-    await transporter.sendMail(mailOptions);
-    await transporter.sendMail(adminMailOptions);
+    // await transporter.sendMail(mailOptions);
+    // await transporter.sendMail(adminMailOptions);
 
     res.status(201).json({ message: 'Booking submitted successfully' });
   } catch (error) {

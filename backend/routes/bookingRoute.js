@@ -1,5 +1,5 @@
 const express = require('express');
-const { saveBooking, getAllBookings, deleteBooking, validateBooking } = require('../controllers/bookingControllers');
+const { saveBooking, getAllBookings, deleteBooking } = require('../controllers/bookingControllers');
 
 const router = express.Router();
 

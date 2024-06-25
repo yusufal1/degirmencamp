@@ -69,49 +69,32 @@ const Booking = () => {
       bookingType: defaultBookingType
     }
   });
+  const [fullyBookedDates, setFullyBookedDates] = useState([]);
 
   const bookingType = watch('bookingType');
   const tentOption = watch('tentOption');
   const checkIn = watch('checkIn');
+  const checkOut = watch('checkOut');
   const numberOfAdults = watch('numberOfAdults');
   const numberOfChildren = watch('numberOfChildren');
 
   useEffect(() => {
-    const fetchBookedDates = async () => {
+    const fetchFullyBookedDates = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/booking`);
-        const bookings = response.data;
-        const dateCounts = {};
-        let bungalowCount = 6;
-
-        const settingsResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/admin/settings`);
-        bungalowCount = settingsResponse.data.bungalowCount || bungalowCount;
-
-        bookings.forEach(booking => {
-          const currentDate = moment(booking.checkIn);
-          const end = moment(booking.checkOut);
-          while (currentDate.isSameOrBefore(end, 'day')) {
-            const dateString = currentDate.format('YYYY-MM-DD');
-            if (!dateCounts[dateString]) {
-              dateCounts[dateString] = 0;
-            }
-            dateCounts[dateString]++;
-            currentDate.add(1, 'days');
-          }
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/fully-booked-dates`, {
+          params: { bookingType }
         });
-
-        setBookedDates({ dateCounts, bungalowCount });
+        setFullyBookedDates(response.data.fullyBookedDates.map(date => moment(date).toDate()));
       } catch (error) {
-        console.error('Error fetching bookings:', error);
+        console.error('Error fetching fully booked dates:', error);
       }
     };
 
-    fetchBookedDates();
-  }, []);
+    fetchFullyBookedDates();
+  }, [bookingType]);
 
-  const isDateBooked = date => {
-    const dateString = moment(date).format('YYYY-MM-DD');
-    return bookedDates.dateCounts[dateString] >= bookedDates.bungalowCount;
+  const isDateFullyBooked = date => {
+    return fullyBookedDates.some(fullyBookedDate => moment(date).isSame(fullyBookedDate, 'day'));
   };
 
   const calculateTotalPrice = (bookingType, numberOfAdults, numberOfChildren, tentOption, checkIn, checkOut) => {
@@ -277,8 +260,11 @@ const Booking = () => {
             render={({ field }) => (
               <DatePicker
                 selected={field.value}
-                onChange={(date) => field.onChange(date)}
-                filterDate={date => !isDateBooked(date)}
+                onChange={field.onChange}
+                filterDate={date => !isDateFullyBooked(date)}
+                selectsStart
+                startDate={checkIn}
+                endDate={checkOut}
                 dateFormat="dd.MM.yyyy"
                 minDate={new Date()}
                 className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
@@ -296,10 +282,12 @@ const Booking = () => {
             render={({ field }) => (
               <DatePicker
                 selected={field.value}
-                onChange={(date) => field.onChange(date)}
-                filterDate={date => !isDateBooked(date)}
+                onChange={field.onChange}
+                filterDate={date => !isDateFullyBooked(date)}
                 dateFormat="dd.MM.yyyy"
-                minDate={checkIn || new Date()}
+                startDate={checkIn}
+                endDate={checkIn}
+                minDate={checkIn ? moment(checkIn).add(1, 'days').toDate() : new Date()}
                 className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
                 id='checkOut'
               />
