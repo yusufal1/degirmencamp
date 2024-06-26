@@ -1,15 +1,24 @@
 const AdminSettings = require('../models/AdminSettings');
 
+exports.getAdminSettings = async (req, res) => {
+  try {
+    const adminSettings = await AdminSettings.findOne({});
+    res.status(200).json(adminSettings);
+  } catch (error) {
+    console.error('Error fetching admin settings:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 exports.updateBungalowCount = async (req, res) => {
   const { bungalowCount } = req.body;
 
   try {
     await AdminSettings.findOneAndUpdate(
-      { name: 'bungalowCount' },
-      { value: bungalowCount },
+      {},
+      { bungalowCount: bungalowCount },
       { upsert: true }
     );
-
     res.status(200).json({ message: 'Bungalow count updated successfully' });
   } catch (error) {
     console.error('Error updating bungalow count:', error);
@@ -22,11 +31,10 @@ exports.updateTentCount = async (req, res) => {
 
   try {
     await AdminSettings.findOneAndUpdate(
-      { name: 'tentCount' },
-      { value: tentCount },
+      {},
+      { tentCount: tentCount },
       { upsert: true }
     );
-
     res.status(200).json({ message: 'Tent count updated successfully' });
   } catch (error) {
     console.error('Error updating tent count:', error);
@@ -39,11 +47,10 @@ exports.updateCaravanCount = async (req, res) => {
 
   try {
     await AdminSettings.findOneAndUpdate(
-      { name: 'caravanCount' },
-      { value: caravanCount },
+      {},
+      { caravanCount: caravanCount },
       { upsert: true }
     );
-
     res.status(200).json({ message: 'Caravan count updated successfully' });
   } catch (error) {
     console.error('Error updating caravan count:', error);

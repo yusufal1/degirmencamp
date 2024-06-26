@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const adminSettingsSchema = new Schema({
-  name: { type: String, required: true, unique: true },
-  value: { type: Number, required: true }
+const adminSettingsSchema = new mongoose.Schema({
+  bungalowCount: { type: Number, default: 6 },
+  tentCount: { type: Number, default: 40 },
+  caravanCount: { type: Number, default: 4 }
 });
 
-const AdminSettings = mongoose.model('AdminSettings', adminSettingsSchema);
-
-module.exports = AdminSettings;
+module.exports = mongoose.model('AdminSettings', adminSettingsSchema);
