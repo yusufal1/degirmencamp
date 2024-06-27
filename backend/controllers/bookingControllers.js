@@ -13,51 +13,33 @@ exports.saveBooking = async (req, res) => {
   const { fullname, email, phoneNumber, bookingType, checkIn, checkOut, numberOfAdults, numberOfChildren, tentOption } = req.body;
 
   try {
-    let adminSettings;
+    const adminSettings = await AdminSettings.findOne({});
+    let maxBookingCount;
     let bookedCounts = {};
     let isFullyBooked = false;
-    let maxBookingCount = 0;
 
-    if (bookingType === 'bungalow') {
-      adminSettings = await AdminSettings.findOne({ name: 'bungalowCount' });
-      maxBookingCount = adminSettings ? adminSettings.value : 6;
-
-      const existingBookings = await Booking.find({
-        bookingType: 'bungalow',
-        checkIn: { $lte: checkOut },
-        checkOut: { $gte: checkIn }
-      });
-
-      bookedCounts = calculateBookedCounts(existingBookings, checkIn, checkOut);
-
-      isFullyBooked = isFullyBookedCheck(bookedCounts, maxBookingCount);
-    } else if (bookingType === 'tent') {
-      adminSettings = await AdminSettings.findOne({ name: 'tentCount' });
-      maxBookingCount = adminSettings ? adminSettings.value : 40;
-
-      const existingBookings = await Booking.find({
-        bookingType: 'tent',
-        checkIn: { $lte: checkOut },
-        checkOut: { $gte: checkIn }
-      });
-
-      bookedCounts = calculateBookedCounts(existingBookings, checkIn, checkOut);
-
-      isFullyBooked = isFullyBookedCheck(bookedCounts, maxBookingCount);
-    } else if (bookingType === 'caravan') {
-      adminSettings = await AdminSettings.findOne({ name: 'caravanCount' });
-      maxBookingCount = adminSettings ? adminSettings.value : 4;
-
-      const existingBookings = await Booking.find({
-        bookingType: 'caravan',
-        checkIn: { $lte: checkOut },
-        checkOut: { $gte: checkIn }
-      });
-
-      bookedCounts = calculateBookedCounts(existingBookings, checkIn, checkOut);
-
-      isFullyBooked = isFullyBookedCheck(bookedCounts, maxBookingCount);
+    switch (bookingType) {
+      case 'bungalow':
+        maxBookingCount = adminSettings ? adminSettings.bungalowCount : 6;
+        break;
+      case 'tent':
+        maxBookingCount = adminSettings ? adminSettings.tentCount : 40;
+        break;
+      case 'caravan':
+        maxBookingCount = adminSettings ? adminSettings.caravanCount : 4;
+        break;
+      default:
+        return res.status(400).json({ error: 'Geçersiz rezervasyon tipi.' });
     }
+
+    const existingBookings = await Booking.find({
+      bookingType: bookingType,
+      checkIn: { $lte: checkOut },
+      checkOut: { $gte: checkIn }
+    });
+
+    bookedCounts = calculateBookedCounts(existingBookings, checkIn, checkOut);
+    isFullyBooked = isFullyBookedCheck(bookedCounts, maxBookingCount);
 
     if (isFullyBooked) {
       return res.status(400).json({ error: `Seçilen tarihler arasında tüm ${bookingType}lar doludur.` });
@@ -77,7 +59,47 @@ exports.saveBooking = async (req, res) => {
 
     await newBooking.save();
 
-    // Nodemailer ve admin bildirimleri şimdilik devre dışı bırakıldı
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'yusufal5558@gmail.com',
+        pass: 'icwi zsbv jsce nluh'
+      }
+    });
+    let mailOptions = {
+      from: 'yusufal5558@gmail.com',
+      to: email,
+      subject: 'Rezervasyon Bilgilendirme',
+      html: `<p>Sayın ${fullname},</p>
+             <p>Rezervasyonunuz başarıyla alınmıştır. Detaylar aşağıdaki gibidir:</p>
+             <p><strong>Rezervasyon Tipi:</strong> ${bookingType}</p>
+             <p><strong>Giriş Tarihi:</strong> ${moment(checkIn).format('DD.MM.YYYY')}</p>
+             <p><strong>Çıkış Tarihi:</strong> ${moment(checkOut).format('DD.MM.YYYY')}</p>
+             <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
+             <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
+             <p>Teşekkürler,</p>
+             <p>Değirmen Kamp</p>`
+    };
+
+    let adminMailOptions = {
+      from: 'yusufal5558@gmail.com',
+      to: 'yusufal5558@gmail.com',
+      subject: 'Yeni Rezervasyon Bildirimi',
+      html: `<p>Yeni bir rezervasyon yapılmıştır. Detaylar aşağıdaki gibidir:</p>
+             <p><strong>Ad Soyad:</strong> ${fullname}</p>
+             <p><strong>E-posta:</strong> ${email}</p>
+             <p><strong>Telefon:</strong> ${phoneNumber}</p>
+             <p><strong>Rezervasyon Tipi:</strong> ${bookingType}</p>
+             <p><strong>Giriş Tarihi:</strong> ${moment(checkIn).format('DD.MM.YYYY')}</p>
+             <p><strong>Çıkış Tarihi:</strong> ${moment(checkOut).format('DD.MM.YYYY')}</p>
+             <p><strong>Yetişkin Sayısı:</strong> ${numberOfAdults}</p>
+             <p><strong>Çocuk Sayısı:</strong> ${numberOfChildren}</p>
+             <p>Teşekkürler,</p>
+             <p>Değirmen Kamp</p>`
+    };
+
+    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(adminMailOptions);
 
     res.status(201).json({ message: 'Booking submitted successfully' });
   } catch (error) {
@@ -93,7 +115,7 @@ exports.getAllBookings = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 exports.deleteBooking = async (req, res) => {
   try {
