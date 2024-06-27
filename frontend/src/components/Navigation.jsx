@@ -36,6 +36,14 @@ const Navigation = () => {
         </li>
         <li>
           <a
+            href="/rezervasyon"
+            className={`${selected === '/rezervasyon' ? 'active' : 'hover:hover-links'}`}
+          >
+            {t('reservation')}
+          </a>
+        </li>
+        <li>
+          <a
             href="/etkinliklerimiz"
             className={`${selected === '/etkinliklerimiz' ? 'active' : 'hover:hover-links'}`}
           >

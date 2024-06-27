@@ -184,7 +184,7 @@ const Booking = () => {
   return (
     <div id='booking' className='bg-[#EFEEEA] py-[10%] flex items-center justify-center flex-col px-[10%]'>
       <h3 className='md:text-4xl text-2xl'>{t('booking')}</h3>
-      <form className='mt-[5%] grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8' onSubmit={handleSubmit(onSubmit)}>
+      <form className='mt-[5%] grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8 xl:w-3/4' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col gap-1'>
           <label htmlFor='fullname'>{t('fullName')}</label>
           <input
@@ -237,12 +237,12 @@ const Booking = () => {
         </div>
         {bookingType === 'tent' && (
           <div className='flex flex-col gap-1 my-auto'>
-            <div className='flex gap-2 items-center justify-between'>
-              <label>
+            <div className='flex items-center justify-between'>
+              <label className='flex gap-2 items-center'>
                 <input type="radio" name="tentOption" value="ownTent" {...register('tentOption')} />
                 {t('haveTent')}
               </label>
-              <label>
+              <label className='flex gap-2 items-center'>
                 <input type="radio" name="tentOption" value="notOwnTent" defaultChecked {...register('tentOption')} />
                 {t('notHaveTent')}
               </label>
@@ -265,7 +265,7 @@ const Booking = () => {
                 endDate={checkOut}
                 dateFormat="dd.MM.yyyy"
                 minDate={new Date()}
-                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4 w-full'
                 id='checkIn'
               />
             )}
@@ -286,7 +286,7 @@ const Booking = () => {
                 startDate={checkIn}
                 endDate={checkIn}
                 minDate={checkIn ? moment(checkIn).add(1, 'days').toDate() : new Date()}
-                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4'
+                className='rounded-2xl h-10 outline-none focus:outline-secondary px-4 w-full'
                 id='checkOut'
               />
             )}
