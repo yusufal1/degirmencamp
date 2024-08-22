@@ -19,7 +19,8 @@ const Footer = () => {
           </ul>
           <ul className='flex flex-col gap-3'>
             <h4 className='text-2xl mb-4'>{t('reservation')}</h4>
-            <li><a href="/rezervasyon" className='text-gray-500 footer-hover-links'>{t('bookNow')}</a></li>
+            {/* <li><a href="/rezervasyon" className='text-gray-500 footer-hover-links'>{t('bookNow')}</a></li> */}
+            <li><a href="tel:+905354113012" className='text-gray-500 footer-hover-links'>{t('bookNow')}</a></li>
             <li><a href="/seceneklerimiz" className='text-gray-500 footer-hover-links'>{t('options')}</a></li>
           </ul>
           <ul className='flex flex-col gap-3'>

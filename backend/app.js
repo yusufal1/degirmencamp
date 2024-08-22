@@ -13,7 +13,7 @@ app.use('/assets', express.static(path.join(__dirname, '../frontend/src/assets')
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(fileUpload());
-
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', require('./routes'));

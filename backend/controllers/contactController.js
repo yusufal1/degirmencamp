@@ -1,5 +1,3 @@
-// contactControl.js
-
 const Contact = require('../models/Contact');
 const nodemailer = require('nodemailer');
 
@@ -13,14 +11,14 @@ exports.saveContactForm = async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'yusufal5558@gmail.com',
-        pass: 'icwi zsbv jsce nluh'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       }
     });
 
     let mailOptions = {
       from: email,
-      to: 'agpasha9@gmail.com',
+      to: 'ismailkazak702@gmail.com',
       subject: 'İletişim Formu',
       html: `<p>Gönderen Ad-Soyad: ${fullname}</p>
              <p>E-posta: ${email}</p>

@@ -1,5 +1,5 @@
 import React from 'react';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import main1 from "../assets/images/gorsel-1.jpg";
 import main2 from "../assets/images/gorsel-3.jpg";
@@ -44,7 +44,8 @@ const Homepage = () => {
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
             <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title1-1')}</p>
             <p className="text-white lg:text-8xl sm:text-5xl text-3xl">{t('banner-title1-2')}</p>
-            <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>{t('reservation')}</a>
+            {/* <a href="#booking" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>{t('reservation')}</a> */}
+            <a href="tel:+905354113012" className='mt-7 text-white px-6 py-4 rounded-3xl rez-btn'>{t('reservation')}</a>
           </div>
         </div>
         <div className="relative">
@@ -56,7 +57,7 @@ const Homepage = () => {
           </div>
         </div>
       </Carousel>
-      <Booking/>
+      {/* <Booking/> */}
       <MainSection/>
       <Cards/>
       <Events/>
