@@ -1,5 +1,6 @@
 {
   "name": "degirmen-kamp",
+  "homepage": "https://www.degirmencamp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
